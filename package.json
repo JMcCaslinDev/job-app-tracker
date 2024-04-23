@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "description": "Job Application Tracker",
     "scripts": {
-        "start": "cd client && npm install && npm run build && cd ../server && npm install && node server.js",
+        "start": "node server/server.js",
         "heroku-postbuild": "cd client && npm install && npm run build"
     },
     "engines": {
-      "node": "14.x"
+        "node": "14.x"
     }
-  }
+}
