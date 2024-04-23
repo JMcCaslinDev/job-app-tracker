@@ -2,7 +2,7 @@
     "name": "job-app-tracker",
     "version": "1.0.0",
     "scripts": {
-      "start": "cd server && npm start",
+      "start": "node server/index.js",
       "heroku-postbuild": "cd client && npm install && npm run build"
     },
     "engines": {
