@@ -1,0 +1,12 @@
+{
+    "name": "job-app-tracker",
+    "version": "1.0.0",
+    "description": "Job Application Tracker",
+    "scripts": {
+      "start": "cd server && npm install && node server.js",
+      "heroku-postbuild": "cd client && npm install && npm run build"
+    },
+    "engines": {
+      "node": "14.x"
+    }
+  }
