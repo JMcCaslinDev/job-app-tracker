@@ -8,6 +8,9 @@
     "heroku-postbuild": "cd ../client && npm install && npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "engines": {
+    "node": "18.17.0"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
