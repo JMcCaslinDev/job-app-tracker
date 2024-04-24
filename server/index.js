@@ -44,23 +44,8 @@ function verifyJwtToken(req, res, next) {
 }
 
 
-    // const { username, password, firstName, lastName, email } = req.body;
-    username = 'user';
-    password = 1234;
-    firstName = 'joe';
-    lastname = 'smith';
-    email = 'joesmith@gmail.com'
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await pool.query(
-      'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
-      [username, hashedPassword, firstName, lastName, email]
-    );
-
-    console.log("\nresult: ", result, "\n");
-
-    
 // User signup
-app.post('/api/signup', async (req, res) => {
+app.get('/api/signup', async (req, res) => {
   try {
 
     console.log("\nEntered /api/signup\n");
