@@ -45,7 +45,7 @@ function verifyJwtToken(req, res, next) {
 
 
 // User signup
-app.get('/api/signup', async (req, res) => {
+app.post('/api/signup', async (req, res) => {
   try {
 
     console.log("\nEntered /api/signup\n");
