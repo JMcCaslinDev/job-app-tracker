@@ -15,52 +15,9 @@ const pool = new Pool({
   },
 });
 
-async function createTables() {
-  try {
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS accounts (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        first_name VARCHAR(255),
-        last_name VARCHAR(255),
-        email VARCHAR(255) UNIQUE,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
 
-    await pool.query(`
-      CREATE TABLE IF NOT EXISTS job_applications (
-        id SERIAL PRIMARY KEY,
-        account_id INTEGER REFERENCES accounts(id),
-        company VARCHAR(255),
-        position VARCHAR(255),
-        status VARCHAR(50),
-        application_date DATE,
-        job_description TEXT,
-        notes TEXT,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      )
-    `);
 
-    console.log('Tables created successfully');
-  } catch (error) {
-    console.error('Error creating tables:', error);
-  }
-}
 
-// Call the createTables function before starting the server
-createTables()
-  .then(() => {
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-      console.log(`Server is running on port ${PORT}`);
-    });
-  })
-  .catch((error) => {
-    console.error('Error starting server:', error);
-  });
 
 // Serve the React app in production
 if (process.env.NODE_ENV === 'production') {
@@ -103,7 +60,7 @@ app.post('/api/signup', async (req, res) => {
       'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [username, hashedPassword, firstName, lastName, email]
     );
-    
+
     console.log("\nresult: ", result, "\n");
 
     const user = result.rows[0];
