@@ -89,6 +89,9 @@ function verifyJwtToken(req, res, next) {
 // User signup
 app.post('/api/signup', async (req, res) => {
   try {
+
+    console.log("\nEntered /api/signup\n");
+
     // const { username, password, firstName, lastName, email } = req.body;
     username = 'user';
     password = 1234;
@@ -100,6 +103,9 @@ app.post('/api/signup', async (req, res) => {
       'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [username, hashedPassword, firstName, lastName, email]
     );
+    
+    console.log("\nresult: ", result, "\n");
+
     const user = result.rows[0];
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
     res.json({ token });
