@@ -1,0 +1,19 @@
+{
+    "sqltools.connections": [
+        {
+            "pgOptions": {
+                "ssl": {
+                    "rejectUnauthorized": false
+                }
+            },
+            "previewLimit": 50,
+            "server": "c7gljno857ucsl.cluster-czrs8kj4isg7.us-east-1.rds.amazonaws.com",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "Heroku DB",
+            "database": "dblpip0b5thkd1",
+            "username": "u6pt2hh2l2r41l",
+            "password": "p783f2a1901a5752343971830b66f926bc4a9b8931b8ebf9b3005d4ce329c6e64"
+        }
+    ]
+}

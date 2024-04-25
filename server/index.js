@@ -50,12 +50,17 @@ app.post('/api/signup', async (req, res) => {
 
     console.log("\nEntered /api/signup\n");
 
-    // const { username, password, firstName, lastName, email } = req.body;
-    username = 'user';
-    password = 1234;
-    firstName = 'joe';
-    lastname = 'smith';
-    email = 'joesmith@gmail.com'
+    const { username, password, firstName, lastName, email } = req.body;
+    console.log("\nusername ", username, "\n");
+    console.log("\npassword ", password, "\n");
+    console.log("\nfirstName ", firstName, "\n");
+    console.log("\nlastName ", lastName, "\n");
+    console.log("\nemail ", email, "\n");
+    // username = 'user';
+    // password = 1234;
+    // firstName = 'joe';
+    // lastname = 'smith';
+    // email = 'joesmith@gmail.com'
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
       'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
