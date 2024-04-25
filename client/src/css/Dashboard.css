@@ -1,0 +1,25 @@
+.dashboard {
+    display: flex;
+  }
+  
+  .navbar {
+    width: 10%;
+    /* Add your navbar styles */
+  }
+  
+  .dashboard-content {
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .job-application-history {
+    /* Add your job application history styles */
+  }
+  
+  .search-section {
+    margin-bottom: 20px;
+  }
+  
+  .history-section {
+    /* Add your history section styles */
+  }
