@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import Navbar from './Navbar';
+import JobApplicationActions from './JobApplicationActions';
 import JobApplicationHistory from './JobApplicationHistory';
 import '../css/Dashboard.css';
 
@@ -60,6 +61,7 @@ const Dashboard = () => {
         <div className="welcome-banner">
           Welcome back, {name.firstName} {name.lastName}!
         </div>
+        <JobApplicationActions />
         <JobApplicationHistory />
       </div>
     </div>

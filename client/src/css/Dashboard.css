@@ -25,3 +25,28 @@
   width: 95%;
   padding: 20px;
 }
+
+/* Dashboard.css */
+
+.job-application-actions {
+  /* Styles for the actions container */
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.url-input-section {
+  /* Styles for the URL input section */
+}
+
+.url-input {
+  /* Styles for the URL input */
+}
+
+.url-input-section button {
+  /* Styles for the Auto Add button */
+}
+
+.job-application-actions button {
+  /* Styles for the Add Manual button */
+}
