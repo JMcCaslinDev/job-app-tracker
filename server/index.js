@@ -47,31 +47,23 @@ function verifyJwtToken(req, res, next) {
 // User signup
 app.post('/api/signup', async (req, res) => {
   try {
-
     console.log("\nEntered /api/signup\n");
-
     const { username, password, firstName, lastName, email } = req.body;
     console.log("\nusername ", username, "\n");
     console.log("\npassword ", password, "\n");
     console.log("\nfirstName ", firstName, "\n");
     console.log("\nlastName ", lastName, "\n");
     console.log("\nemail ", email, "\n");
-    // username = 'user';
-    // password = 1234;
-    // firstName = 'joe';
-    // lastname = 'smith';
-    // email = 'joesmith@gmail.com'
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
       'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
       [username, hashedPassword, firstName, lastName, email]
     );
-
     console.log("\nresult: ", result, "\n");
-
     const user = result.rows[0];
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
-    res.json({ token });
+    res.json({ token, success: true });
   } catch (error) {
     console.error('Error signing up:', error);
     res.status(500).json({ error: 'Internal server error' });
@@ -82,13 +74,12 @@ app.post('/api/signup', async (req, res) => {
 app.post('/api/login', async (req, res) => {
   try {
     console.log("Entered /api/login post function\n");
-
     const { username, password } = req.body;
     const result = await pool.query('SELECT * FROM accounts WHERE username = $1', [username]);
     const user = result.rows[0];
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
-      res.json({ token });
+      res.json({ token, success: true });
       console.log("Correct credentials");
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
