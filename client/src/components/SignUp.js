@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import '../css/signup.css';
 
 const SignUp = () => {
   const [username, setUsername] = useState('');
@@ -10,7 +11,6 @@ const SignUp = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const response = await axios.post('/api/signup', {
         username,
@@ -19,7 +19,8 @@ const SignUp = () => {
         lastName,
         email,
       });
-      console.log(response.data); // Handle the response as needed
+      console.log(response.data);
+      // Handle the response as needed
       // Reset form fields
       setUsername('');
       setPassword('');
@@ -32,11 +33,11 @@ const SignUp = () => {
   };
 
   return (
-    <div>
+    <div className="signup-container">
       <h2>Sign Up</h2>
       <p>Create a new account.</p>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <form onSubmit={handleSubmit} className="signup-form">
+        <div className="form-group">
           <label htmlFor="username">Username:</label>
           <input
             type="text"
@@ -46,7 +47,7 @@ const SignUp = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="password">Password:</label>
           <input
             type="password"
@@ -56,7 +57,7 @@ const SignUp = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="firstName">First Name:</label>
           <input
             type="text"
@@ -66,7 +67,7 @@ const SignUp = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="lastName">Last Name:</label>
           <input
             type="text"
@@ -76,7 +77,7 @@ const SignUp = () => {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label htmlFor="email">Email:</label>
           <input
             type="email"
@@ -86,7 +87,7 @@ const SignUp = () => {
             required
           />
         </div>
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="signup-button">Sign Up</button>
       </form>
     </div>
   );
