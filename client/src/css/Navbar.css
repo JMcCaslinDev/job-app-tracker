@@ -1,12 +1,15 @@
 /* Navbar.css */
 
 .navbar {
-    /* ... your existing styles ... */
+    width: auto; /* Adjust to content or set a specific width */
+    background-color: #3d3c42; /* Dark grey */
+    color: white;
     display: flex;
     flex-direction: column;
     justify-content: start;
     height: 100%; /* Full height */
-    padding-top: 10px; /* Space at the top */
-    padding-bottom: 10px; /* Space at the bottom */
+    padding: 10px; /* Padding around items */
+    box-sizing: border-box; /* Include padding in the width */
+    /* Remove border if not needed */
   }
   
