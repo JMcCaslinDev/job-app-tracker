@@ -3,64 +3,65 @@
 .dashboard {
   display: flex;
   height: 100vh;
-  color: #ffffff; /* Setting default text color to white for contrast */
-  background-color: #1c1c1e; /* Dark grey theme for dashboard */
+  color: #f5f5f5; /* Off-white color for better legibility */
+  background-color: #2d2d30; /* Dark grey theme for dashboard background */
 }
 
 .navbar {
   width: 5%;
-  background-color: #4b0082; /* Dark purple for the navbar */
-  color: white;
+  background-color: #3d3c42; /* Darker shade of grey for the navbar */
+  color: #c0bfc7; /* Light purple-grey text for better readability */
   display: flex;
   flex-direction: column;
-  padding: 10px 0;
+  justify-content: start;
 }
 
-.welcome-banner,
-.job-application-actions,
-.job-application-history {
-  flex-grow: 1; /* Allows these sections to fill the remaining space */
-  padding: 10px;
+.dashboard-main {
+  width: 95%; /* Takes the remaining space */
+  display: flex;
+  flex-direction: column;
+  overflow: auto; /* If your content is taller than the screen */
 }
 
 .welcome-banner {
-  background-color: #312450; /* Dark purple background */
-  margin-left: 5%; /* Offset by the width of the navbar */
+  background-color: #504e55; /* Muted dark purple background */
+  padding: 20px;
+  margin-bottom: 10px; /* Space between welcome banner and action section */
 }
 
 .job-application-actions {
   display: flex;
-  justify-content: start;
   align-items: center;
-  gap: 10px; /* Spacing between elements */
-  margin-left: 5%; /* Offset by the width of the navbar */
-  background-color: #262626; /* Slightly lighter grey for separation */
+  gap: 15px;
+  padding: 20px;
+  background-color: #39373d; /* Slightly different background for section differentiation */
 }
 
 .url-input {
-  flex-grow: 1; /* Allows input to fill available space */
-  padding: 5px;
-  border: 1px solid #444; /* Slightly lighter border for visibility */
-  background-color: #1e1e1e; /* Even lighter grey for the input field */
-  color: #ddd; /* Light grey text */
+  flex-grow: 1;
+  padding: 10px;
+  border: 1px solid #444;
+  background-color: #2d2d30; /* Matching the dashboard theme */
+  color: #ffffff;
 }
 
 .url-input::placeholder {
-  color: #555; /* Placeholder text color */
+  color: #a8a8a8; /* Lighter text for placeholder */
 }
 
 .button {
-  padding: 5px 15px;
-  background-color: #673ab7; /* Purple color for buttons */
-  border: none;
+  padding: 10px 20px;
+  background-color: #5c5876; /* Muted purple for buttons */
+  border: 1px solid #6e6a7e; /* Slightly lighter border for visibility */
+  color: #ffffff;
   cursor: pointer;
 }
 
-/* Rest of the history section and other elements */
-.history-section {
-  margin-left: 5%; /* Offset by the width of the navbar */
-  background-color: #232323; /* Different grey to distinguish section */
-  /* Add more styles for the job application history list */
+.job-application-history {
+  flex-grow: 1;
+  background-color: #333336; /* Slightly lighter grey for the history section */
+  padding: 20px;
+  overflow-y: auto; /* Scrollable content for history section */
 }
 
-/* Add other CSS rules for buttons, input, etc., as necessary */
+/* Additional styling for the history list items, inputs, and buttons goes here */
