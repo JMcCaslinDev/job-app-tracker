@@ -81,14 +81,18 @@ app.post('/api/signup', async (req, res) => {
 // User login
 app.post('/api/login', async (req, res) => {
   try {
+    console.log("Entered /api/login post function\n");
+
     const { username, password } = req.body;
     const result = await pool.query('SELECT * FROM accounts WHERE username = $1', [username]);
     const user = result.rows[0];
     if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
       res.json({ token });
+      console.log("Correct credentials");
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
+      console.log("Wrong credentials");
     }
   } catch (error) {
     console.error('Error logging in:', error);
