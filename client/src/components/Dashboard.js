@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import jwt from 'jsonwebtoken'; 
+import jwtDecode from 'jwt-decode'; 
 import Navbar from './Navbar';
 import JobApplicationHistory from './JobApplicationHistory';
 import '../css/Dashboard.css';
@@ -18,8 +18,8 @@ const Dashboard = () => {
     }
 
     try {
-      // Decode the token and check for expiration using jsonwebtoken
-      const decodedToken = jwt.decode(token); // Use jwt.decode here
+      // Decode the token and check for expiration
+      const decodedToken = jwtDecode(token); // Use jwtDecode here
 
       // Check if the token has expired
       const currentTime = Date.now() / 1000;
