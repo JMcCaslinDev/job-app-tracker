@@ -1,5 +1,6 @@
 // components/JobApplicationHistory.js
 import React, { useState } from 'react';
+import '../css/Dashboard.css'; // Import the CSS if needed
 
 const JobApplicationHistory = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,6 +15,16 @@ const JobApplicationHistory = () => {
 
   return (
     <div className="job-application-history">
+      <div className="url-bar">
+        <input
+          type="text"
+          className="search-input"
+          placeholder="https://"
+          readOnly
+        />
+        <button className="search-button">Search</button>
+        <button className="add-button">Add Manual</button>
+      </div>
       <div className="search-section">
         <input
           type="text"

@@ -56,10 +56,10 @@ const Dashboard = () => {
   return (
     <div className="dashboard">
       <Navbar />
-      <div className="welcome-banner">
-        Welcome back, {name.firstName} {name.lastName}!
-      </div>
-      <div className="dashboard-content">
+      <div className="dashboard-main">
+        <div className="welcome-banner">
+          Welcome back, {name.firstName} {name.lastName}!
+        </div>
         <JobApplicationHistory />
       </div>
     </div>

@@ -1,25 +1,27 @@
+/* Dashboard.css */
+
 .dashboard {
-    display: flex;
-  }
-  
-  .navbar {
-    width: 10%;
-    /* Add your navbar styles */
-  }
-  
-  .dashboard-content {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .job-application-history {
-    /* Add your job application history styles */
-  }
-  
-  .search-section {
-    margin-bottom: 20px;
-  }
-  
-  .history-section {
-    /* Add your history section styles */
-  }
+  display: flex;
+  height: 100vh;
+}
+
+.navbar {
+  width: 5%;
+  background-color: #333; /* or any color you prefer */
+  color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: start; /* Align items to the top */
+}
+
+.welcome-banner {
+  width: 95%; /* Remaining width */
+  background-color: #f3f3f3; /* Light grey background, or choose your color */
+  padding: 10px;
+  text-align: center; /* Center the welcome text */
+}
+
+.dashboard-content {
+  width: 95%;
+  padding: 20px;
+}
