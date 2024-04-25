@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import JobApplicationHistory from './components/JobApplicationHistory';
-import './Dashboard.css';
+import '../css/Dashboard.css';
 
 const Dashboard = () => {
   return (
