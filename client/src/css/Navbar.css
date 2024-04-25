@@ -2,14 +2,13 @@
 
 .navbar {
     width: 10%; /* Adjust the percentage or set a fixed width like 160px */
-    min-width: 160px; /* Ensure it doesn't get too narrow */
+    min-width: 100px; /* Ensure it doesn't get too narrow */
     background-color: #3d3c42; /* Dark grey */
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: start;
     height: 100%; /* Full height */
-    padding: 10px; /* Padding around items */
     box-sizing: border-box; /* Include padding in the width */
     /* Remove border if not needed */
   }
