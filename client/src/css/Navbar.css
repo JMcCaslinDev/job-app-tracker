@@ -1,7 +1,8 @@
 /* Navbar.css */
 
 .navbar {
-    width: auto; /* Adjust to content or set a specific width */
+    width: 10%; /* Adjust the percentage or set a fixed width like 160px */
+    min-width: 160px; /* Ensure it doesn't get too narrow */
     background-color: #3d3c42; /* Dark grey */
     color: white;
     display: flex;
