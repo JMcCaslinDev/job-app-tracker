@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import '../css/signUp.css';
 
 const SignUp = () => {
@@ -8,6 +9,7 @@ const SignUp = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -21,6 +23,12 @@ const SignUp = () => {
       });
       console.log(response.data);
       // Handle the response as needed
+      if (response.data.success) {
+        // Signup successful, redirect to the dashboard
+        navigate('/dashboard');
+      } else {
+        // Handle signup error, e.g., display an error message
+      }
       // Reset form fields
       setUsername('');
       setPassword('');
@@ -29,6 +37,7 @@ const SignUp = () => {
       setEmail('');
     } catch (error) {
       console.error('Error:', error);
+      // Handle signup error, e.g., display an error message
     }
   };
 
