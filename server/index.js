@@ -88,6 +88,29 @@ app.get('/api/dashboard', verifyJwtToken, (req, res) => {
 });
 
 
+// Endpoint to get user's first and last name by account_id
+app.get('/api/user/name', verifyJwtToken, async (req, res) => {
+  try {
+    const { accountId } = req; // accountId is set in verifyJwtToken middleware
+    const queryResult = await pool.query(
+      'SELECT first_name, last_name FROM accounts WHERE account_id = $1',
+      [accountId]
+    );
+    
+    if (queryResult.rows.length === 0) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const { first_name: firstName, last_name: lastName } = queryResult.rows[0];
+    res.json({ firstName, lastName });
+  } catch (error) {
+    console.error('Error retrieving user name:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
+
 // Create a new job application for a user
 app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   try {

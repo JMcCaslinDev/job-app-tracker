@@ -1,44 +1,62 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import jwtDecode from 'jwt-decode'; 
+import axios from 'axios';
 import Navbar from './Navbar';
 import JobApplicationHistory from './JobApplicationHistory';
 import '../css/Dashboard.css';
 
 const Dashboard = () => {
+  const [name, setName] = useState({ firstName: '', lastName: '' });
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     
-    // Redirect to login if no token found
     if (!token) {
       navigate('/login');
       return;
     }
 
-    try {
-      // Decode the token and check for expiration
-      const decodedToken = jwtDecode(token); // Use jwtDecode here
+    const fetchName = async () => {
+      try {
+        // Decode the token and check for expiration
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
 
-      // Check if the token has expired
-      const currentTime = Date.now() / 1000;
-      if (decodedToken.exp < currentTime) {
+        if (decodedToken.exp < currentTime) {
+          localStorage.removeItem('token');
+          navigate('/login');
+          return;
+        }
+
+        // Fetch the user's first and last name using the token
+        const response = await axios.get('/api/user/name', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        setName({
+          firstName: response.data.firstName,
+          lastName: response.data.lastName,
+        });
+
+      } catch (error) {
+        // If token is invalid, expired or if there is an error fetching the name, navigate to login
+        console.error('Error: ', error);
         localStorage.removeItem('token');
         navigate('/login');
       }
+    };
 
-    } catch (error) {
-      // If token is invalid or can't be decoded, navigate to login
-      console.error('Token is invalid: ', error);
-      localStorage.removeItem('token');
-      navigate('/login');
-    }
+    fetchName();
   }, [navigate]);
 
   return (
     <div className="dashboard">
       <Navbar />
+      <div className="welcome-banner">
+        Welcome back, {name.firstName} {name.lastName}!
+      </div>
       <div className="dashboard-content">
         <JobApplicationHistory />
       </div>
