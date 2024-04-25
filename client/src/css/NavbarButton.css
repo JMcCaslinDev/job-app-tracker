@@ -1,0 +1,24 @@
+/* NavbarButton.css */
+
+.navbar-button {
+    display: block; /* Stack buttons vertically */
+    width: 100%;
+    padding: 10px;
+    color: #ffffff;
+    background-color: #3d3c42; /* Dark grey */
+    border: none;
+    border-bottom: 1px solid #504e55; /* Add a separator */
+    text-align: left; /* Align text to the left */
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .navbar-button:hover {
+    background-color: #5c5876; /* Slightly lighter on hover */
+  }
+  
+  .navbar-button.logout {
+    border-top: 1px solid #504e55; /* Add a separator at the top for the logout button */
+    margin-top: auto; /* Push the logout button to the bottom */
+  }
+  

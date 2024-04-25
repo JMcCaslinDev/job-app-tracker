@@ -1,0 +1,12 @@
+/* Navbar.css */
+
+.navbar {
+    /* ... your existing styles ... */
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    height: 100%; /* Full height */
+    padding-top: 10px; /* Space at the top */
+    padding-bottom: 10px; /* Space at the bottom */
+  }
+  
