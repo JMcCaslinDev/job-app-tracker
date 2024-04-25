@@ -3,50 +3,64 @@
 .dashboard {
   display: flex;
   height: 100vh;
+  color: #ffffff; /* Setting default text color to white for contrast */
+  background-color: #1c1c1e; /* Dark grey theme for dashboard */
 }
 
 .navbar {
   width: 5%;
-  background-color: #333; /* or any color you prefer */
+  background-color: #4b0082; /* Dark purple for the navbar */
   color: white;
   display: flex;
   flex-direction: column;
-  justify-content: start; /* Align items to the top */
+  padding: 10px 0;
+}
+
+.welcome-banner,
+.job-application-actions,
+.job-application-history {
+  flex-grow: 1; /* Allows these sections to fill the remaining space */
+  padding: 10px;
 }
 
 .welcome-banner {
-  width: 95%; /* Remaining width */
-  background-color: #f3f3f3; /* Light grey background, or choose your color */
-  padding: 10px;
-  text-align: center; /* Center the welcome text */
+  background-color: #312450; /* Dark purple background */
+  margin-left: 5%; /* Offset by the width of the navbar */
 }
-
-.dashboard-content {
-  width: 95%;
-  padding: 20px;
-}
-
-/* Dashboard.css */
 
 .job-application-actions {
-  /* Styles for the actions container */
   display: flex;
-  justify-content: space-between;
-  padding: 10px;
-}
-
-.url-input-section {
-  /* Styles for the URL input section */
+  justify-content: start;
+  align-items: center;
+  gap: 10px; /* Spacing between elements */
+  margin-left: 5%; /* Offset by the width of the navbar */
+  background-color: #262626; /* Slightly lighter grey for separation */
 }
 
 .url-input {
-  /* Styles for the URL input */
+  flex-grow: 1; /* Allows input to fill available space */
+  padding: 5px;
+  border: 1px solid #444; /* Slightly lighter border for visibility */
+  background-color: #1e1e1e; /* Even lighter grey for the input field */
+  color: #ddd; /* Light grey text */
 }
 
-.url-input-section button {
-  /* Styles for the Auto Add button */
+.url-input::placeholder {
+  color: #555; /* Placeholder text color */
 }
 
-.job-application-actions button {
-  /* Styles for the Add Manual button */
+.button {
+  padding: 5px 15px;
+  background-color: #673ab7; /* Purple color for buttons */
+  border: none;
+  cursor: pointer;
 }
+
+/* Rest of the history section and other elements */
+.history-section {
+  margin-left: 5%; /* Offset by the width of the navbar */
+  background-color: #232323; /* Different grey to distinguish section */
+  /* Add more styles for the job application history list */
+}
+
+/* Add other CSS rules for buttons, input, etc., as necessary */
