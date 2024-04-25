@@ -17,8 +17,6 @@ const pool = new Pool({
 
 
 
-
-
 // Serve the React app in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
@@ -38,7 +36,7 @@ function verifyJwtToken(req, res, next) {
     if (err) {
       return res.status(401).json({ error: 'Invalid token' });
     }
-    req.userId = decoded.userId;
+    req.accountId = decoded.accountId;
     next();
   });
 }
@@ -47,22 +45,14 @@ function verifyJwtToken(req, res, next) {
 // User signup
 app.post('/api/signup', async (req, res) => {
   try {
-    console.log("\nEntered /api/signup\n");
     const { username, password, firstName, lastName, email } = req.body;
-    console.log("\nusername ", username, "\n");
-    console.log("\npassword ", password, "\n");
-    console.log("\nfirstName ", firstName, "\n");
-    console.log("\nlastName ", lastName, "\n");
-    console.log("\nemail ", email, "\n");
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const result = await pool.query(
-      'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING *',
+      'INSERT INTO accounts (username, password, first_name, last_name, email) VALUES ($1, $2, $3, $4, $5) RETURNING account_id',
       [username, hashedPassword, firstName, lastName, email]
     );
-    console.log("\nresult: ", result, "\n");
-    const user = result.rows[0];
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+    const accountId = result.rows[0].account_id;
+    const token = jwt.sign({ accountId }, process.env.JWT_SECRET);
     res.json({ token, success: true });
   } catch (error) {
     console.error('Error signing up:', error);
@@ -70,20 +60,18 @@ app.post('/api/signup', async (req, res) => {
   }
 });
 
+
 // User login
 app.post('/api/login', async (req, res) => {
   try {
-    console.log("Entered /api/login post function\n");
     const { username, password } = req.body;
     const result = await pool.query('SELECT * FROM accounts WHERE username = $1', [username]);
     const user = result.rows[0];
     if (user && (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
+      const token = jwt.sign({ accountId: user.account_id }, process.env.JWT_SECRET);
       res.json({ token, success: true });
-      console.log("Correct credentials");
     } else {
       res.status(401).json({ error: 'Invalid credentials' });
-      console.log("Wrong credentials");
     }
   } catch (error) {
     console.error('Error logging in:', error);
@@ -91,13 +79,21 @@ app.post('/api/login', async (req, res) => {
   }
 });
 
+
+// Protected dashboard route
+app.get('/api/dashboard', verifyJwtToken, (req, res) => {
+  // If the user is authenticated, send the dashboard data
+  res.json({ message: 'Welcome to the dashboard', account_id: req.account_id });
+});
+
+
 // Create a new job application for a user
 app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   try {
     const { company, position, status, applicationDate, jobDescription, notes } = req.body;
     const result = await pool.query(
       'INSERT INTO job_applications (account_id, company, position, status, application_date, job_description, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [req.userId, company, position, status, applicationDate, jobDescription, notes]
+      [req.accountId, company, position, status, applicationDate, jobDescription, notes]
     );
     const jobApplication = result.rows[0];
     res.status(201).json(jobApplication);
@@ -110,7 +106,7 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
 // Get all job applications for a user
 app.get('/api/job-applications', verifyJwtToken, async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM job_applications WHERE account_id = $1', [req.userId]);
+    const result = await pool.query('SELECT * FROM job_applications WHERE account_id = $1', [req.accountId]);
     const jobApplications = result.rows;
     res.json(jobApplications);
   } catch (error) {
@@ -126,7 +122,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
     const { company, position, status, applicationDate, jobDescription, notes } = req.body;
     const result = await pool.query(
       'UPDATE job_applications SET company = $1, position = $2, status = $3, application_date = $4, job_description = $5, notes = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7 AND account_id = $8 RETURNING *',
-      [company, position, status, applicationDate, jobDescription, notes, id, req.userId]
+      [company, position, status, applicationDate, jobDescription, notes, id, req.accountId]
     );
     const updatedJobApplication = result.rows[0];
     if (updatedJobApplication) {
@@ -146,7 +142,7 @@ app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
     const { id } = req.params;
     const result = await pool.query('DELETE FROM job_applications WHERE id = $1 AND account_id = $2 RETURNING *', [
       id,
-      req.userId,
+      req.accountId,
     ]);
     const deletedJobApplication = result.rows[0];
     if (deletedJobApplication) {

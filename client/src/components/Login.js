@@ -20,6 +20,7 @@ const Login = () => {
 
       if (response.data.success) {
         // Login successful, redirect to the dashboard
+        localStorage.setItem('token', response.data.token);
         navigate('/dashboard');
       } else {
         setError('Invalid username or password');

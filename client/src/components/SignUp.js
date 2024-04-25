@@ -25,6 +25,7 @@ const SignUp = () => {
       // Handle the response as needed
       if (response.data.success) {
         // Signup successful, redirect to the dashboard
+        localStorage.setItem('token', response.data.token);
         navigate('/dashboard');
       } else {
         // Handle signup error, e.g., display an error message
