@@ -1,11 +1,19 @@
 /* Navbar.css */
 .navbar {
-    width: 100px; /* Adjust this value to make the navbar narrower */
+    width: 100px;
     background-color: #3d3c42;
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: start;
     height: 100%;
     box-sizing: border-box;
+  }
+  
+  .navbar-buttons {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .navbar-spacer {
+    flex-grow: 1;
   }
