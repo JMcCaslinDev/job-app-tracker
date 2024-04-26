@@ -16,7 +16,7 @@ const Dashboard = () => {
   console.log("\n1\n");
   useEffect(() => {
     const token = localStorage.getItem('token');
-
+    console.log("\nTOKEN: ", token, "\n");
     if (!token) {
       navigate('/login');
       return;

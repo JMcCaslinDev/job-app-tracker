@@ -21,6 +21,7 @@ const Login = () => {
       if (response.data.success) {
         // Login successful, redirect to the dashboard
         localStorage.setItem('token', response.data.token);
+        console.log("\nresponse.data.token: ", response.data.token, "\n");
         navigate('/dashboard');
       } else {
         setError('Invalid username or password');
