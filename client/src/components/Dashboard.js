@@ -25,6 +25,7 @@ const Dashboard = () => {
       try {
         // Decode the token and check for expiration
         const decodedToken = jwtDecode(token);
+        console.log("\nDecoded token: ", decodedToken, "\n");
         const currentTime = Date.now() / 1000;
 
         if (decodedToken.exp < currentTime) {
