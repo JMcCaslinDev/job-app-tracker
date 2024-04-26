@@ -16,7 +16,6 @@ const pool = new Pool({
 
 
 
-// Middleware to verify JWT token
 function verifyJwtToken(req, res, next) {
   console.log("Entered verifyJwtToken function middleware");
   const token = req.headers.authorization;
@@ -27,7 +26,10 @@ function verifyJwtToken(req, res, next) {
     return res.status(401).json({ error: 'No token provided' });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  // Remove the "Bearer " prefix from the token
+  const tokenWithoutPrefix = token.replace('Bearer ', '');
+
+  jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.log("Invalid token:", err);
       return res.status(401).json({ error: 'Invalid token' });
