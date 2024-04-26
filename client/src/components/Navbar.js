@@ -1,9 +1,12 @@
 // components/Navbar.js
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import NavbarButton from './NavbarButton';
 import '../css/Navbar.css';
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   const handleLogout = () => {
     // Remove the token from local storage
     localStorage.removeItem('token');
