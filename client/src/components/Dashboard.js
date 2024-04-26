@@ -30,7 +30,7 @@ const Dashboard = () => {
 
         if (decodedToken.exp < currentTime) {
           localStorage.removeItem('token');
-          navigate('/login');
+          navigate('/');
           return;
         }
 
@@ -38,12 +38,12 @@ const Dashboard = () => {
         const response = await axios.get('/api/user/name', {
           headers: { Authorization: `Bearer ${token}` }
         });
-
+        console.log("\nresponse: ", response,  "\n");
         setName({
           firstName: response.data.firstName,
           lastName: response.data.lastName,
         });
-
+        console.log("\nfirstName: ", firstName, "\n");
       } catch (error) {
         // If token is invalid, expired or if there is an error fetching the name, navigate to login
         console.error('Error: ', error);
