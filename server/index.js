@@ -6,7 +6,6 @@ const { Pool } = require('pg');
 
 const app = express();
 app.use(express.json());
-console.log("Hello World!");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -27,6 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Middleware to verify JWT token
 function verifyJwtToken(req, res, next) {
+  console.log("Entered verifyJwtToken function middleware")
   const token = req.headers.authorization;
   console.log("Token:", token);
 
@@ -69,6 +69,7 @@ app.post('/api/signup', async (req, res) => {
 // User login
 app.post('/api/login', async (req, res) => {
   try {
+    console.log("\nEntered /api/login\n");
     const { username, password } = req.body;
     const result = await pool.query('SELECT * FROM accounts WHERE username = $1', [username]);
     const user = result.rows[0];
