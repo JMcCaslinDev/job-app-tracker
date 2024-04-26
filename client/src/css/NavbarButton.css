@@ -10,10 +10,10 @@
     box-sizing: border-box;
     padding: 20px 10px;
     position: relative;
-    height: 60px; /* Set a fixed height for all buttons */
-    display: flex; /* Use flexbox for centering text */
-    align-items: center; /* Center text vertically */
-    justify-content: center; /* Center text horizontally */
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   
   .navbar-button::after {
@@ -28,10 +28,6 @@
   
   .navbar-button:hover {
     background-color: #5c5876;
-  }
-  
-  .navbar-button.logout {
-    margin-top: auto;
   }
   
   .navbar-button.logout::before {

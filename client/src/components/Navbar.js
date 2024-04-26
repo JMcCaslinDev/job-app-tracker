@@ -10,10 +10,8 @@ const Navbar = () => {
 
   return (
     <nav className="navbar">
-      <div className="navbar-buttons">
-        <NavbarButton text="Dashboard" className="dashboard" />
-        <NavbarButton text="Settings" className="settings" />
-      </div>
+      <NavbarButton text="Dashboard" className="dashboard" />
+      <NavbarButton text="Settings" className="settings" />
       <div className="navbar-spacer"></div>
       <NavbarButton text="Logout" className="logout" onClick={handleLogout} />
     </nav>

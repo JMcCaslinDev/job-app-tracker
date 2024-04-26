@@ -9,11 +9,6 @@
     box-sizing: border-box;
   }
   
-  .navbar-buttons {
-    display: flex;
-    flex-direction: column;
-  }
-  
   .navbar-spacer {
     flex-grow: 1;
   }
