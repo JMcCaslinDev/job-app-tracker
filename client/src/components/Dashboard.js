@@ -27,12 +27,13 @@ const Dashboard = () => {
         const decodedToken = jwtDecode(token);
         console.log("\nDecoded token: ", decodedToken, "\n");
         const currentTime = Date.now() / 1000;
-
+        console.log("\n1\n");
         if (decodedToken.exp < currentTime) {
           localStorage.removeItem('token');
           navigate('/');
           return;
         }
+        console.log("\n2\n");
 
         // Fetch the user's first and last name using the token
         const response = await axios.get('/api/user/name', {
