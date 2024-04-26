@@ -1,5 +1,3 @@
-
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
@@ -11,17 +9,18 @@ import '../css/Dashboard.css';
 
 const Dashboard = () => {
   const [name, setName] = useState({ firstName: '', lastName: '' });
+  const [dashboardData, setDashboardData] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       navigate('/login');
       return;
     }
-  
-    const fetchName = async () => {
+
+    const fetchNameAndDashboardData = async () => {
       try {
         const decodedToken = jwtDecode(token);
         const currentTime = Date.now() / 1000;
@@ -30,32 +29,38 @@ const Dashboard = () => {
           navigate('/');
           return;
         }
-  
-        const response = await axios.get('/api/user/name', {
+
+        const nameResponse = await axios.get('/api/user/name', {
           headers: { Authorization: `Bearer ${token}` }
         });
-  
-        if (response.data && response.data.firstName) {
+
+        if (nameResponse.data && nameResponse.data.firstName) {
           setName({
-            firstName: response.data.firstName,
-            lastName: response.data.lastName,
+            firstName: nameResponse.data.firstName,
+            lastName: nameResponse.data.lastName,
           });
-          console.log("\nresponse.data.firstName: ", response.data.firstName, "\n");
-          console.log("\nresponse.data.lastName: ", response.data.lastName, "\n");
         } else {
-          // Handle unexpected response structure
-          console.error('Unexpected response structure:', response.data);
+          console.error('Unexpected response structure:', nameResponse.data);
         }
+
+        // Fetching dashboard data
+        const dashboardResponse = await axios.get('/api/dashboard', {
+          headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (dashboardResponse.data) {
+          setDashboardData(dashboardResponse.data);
+        }
+
       } catch (error) {
         console.error('Error fetching user data:', error);
         localStorage.removeItem('token');
         navigate('/login');
       }
     };
-  
-    fetchName();
+
+    fetchNameAndDashboardData();
   }, [navigate]);
-  
 
   return (
     <div className="dashboard">
@@ -63,6 +68,10 @@ const Dashboard = () => {
       <div className="dashboard-main">
         <div className="welcome-banner">
           Welcome back, {name.firstName} {name.lastName}!
+        </div>
+        <div className="dashboard-info">
+          {/* Displaying dashboard data */}
+          Dashboard Message: {dashboardData.message || 'No specific dashboard data.'}
         </div>
         <JobApplicationActions />
         <JobApplicationHistory />
