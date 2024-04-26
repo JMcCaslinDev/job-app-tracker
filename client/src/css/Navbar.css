@@ -1,6 +1,6 @@
 /* Navbar.css */
 .navbar {
-    width: 200px; /* Set a fixed width for better consistency */
+    width: 100px; /* Adjust this value to make the navbar narrower */
     background-color: #3d3c42;
     color: white;
     display: flex;

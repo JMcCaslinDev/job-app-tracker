@@ -8,8 +8,8 @@
     transition: background-color 0.3s ease;
     width: 100%;
     box-sizing: border-box;
-    padding: 20px 10px; /* Add padding for better spacing */
-    position: relative; /* Add position for pseudo-element */
+    padding: 20px 10px;
+    position: relative;
   }
   
   .navbar-button::after {
@@ -19,11 +19,15 @@
     left: 10%;
     right: 10%;
     height: 1px;
-    background-color: #504e55; /* Separator between buttons */
+    background-color: #504e55;
   }
   
   .navbar-button:hover {
     background-color: #5c5876;
+  }
+  
+  .navbar-button.dashboard {
+    margin-bottom: 20px; /* Add spacing below the dashboard button */
   }
   
   .navbar-button.logout {
@@ -37,5 +41,5 @@
     left: 10%;
     right: 10%;
     height: 1px;
-    background-color: #504e55; /* Separator on top */
+    background-color: #504e55;
   }

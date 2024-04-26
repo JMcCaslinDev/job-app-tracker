@@ -1,5 +1,4 @@
 /* Dashboard.css */
-
 .dashboard {
   display: flex;
   height: 100vh;
@@ -8,7 +7,7 @@
 }
 
 .navbar {
-  width: 200px; /* Match the width in Navbar.css */
+  width: 100px; /* Match the width in Navbar.css */
   background-color: #3d3c42;
   color: #c0bfc7;
   display: flex;
@@ -17,7 +16,7 @@
 }
 
 .dashboard-main {
-  flex: 1; /* Takes the remaining space */
+  flex: 1;
   display: flex;
   flex-direction: column;
   overflow: auto;
