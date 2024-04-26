@@ -18,8 +18,8 @@ const Dashboard = () => {
     const token = localStorage.getItem('token');
     console.log("\nTOKEN: ", token, "\n");
     if (!token) {
-      console.log("\n!token navigating to /login now!\n");
-      navigate('/login');
+      console.log("\nNo token found, navigating to / route now!\n");
+      navigate('/');
       return;
     }
     console.log("\n2\n");
