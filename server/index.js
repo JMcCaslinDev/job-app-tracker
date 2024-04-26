@@ -16,14 +16,6 @@ const pool = new Pool({
 
 
 
-// Serve the React app in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
-  });
-}
-
 // Middleware to verify JWT token
 function verifyJwtToken(req, res, next) {
   console.log("Entered verifyJwtToken function middleware");
@@ -198,6 +190,19 @@ app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+// ALL API Routes Above Here
+
+
+// Serve the React app in production
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '..', 'client', 'build')));
+  app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
+  });
+}
+
 
 const PORT = process.env.PORT || 5000 || 3000;
 app.listen(PORT, () => {
