@@ -113,11 +113,13 @@ const SignUp = () => {
         </div>
         <button type="submit" className="signup-button">Sign Up</button>
       </form>
+      
+      <br></br>
 
       <button type="button" onClick={handleLoginClick}>
       Already have an account? Login here
       </button>
-      
+
     </div>
 
     

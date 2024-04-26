@@ -13,6 +13,11 @@ const Login = () => {
     }
   }, [navigate]);
 
+  //  signUp route button action
+  const handleSignupClick = () => {
+    navigate('/signup');
+  };
+
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -67,6 +72,13 @@ const Login = () => {
         </div>
         <button type="submit" className="login-button">Login</button>
       </form>
+
+      <br></br>
+      
+      <button type="button" onClick={handleSignupClick}>
+      Don't have an account? Signup here
+      </button>
+
     </div>
   );
 };
