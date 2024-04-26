@@ -93,6 +93,7 @@ app.get('/api/dashboard', verifyJwtToken, (req, res) => {
 });
 
 
+
 // Endpoint to get user's first and last name by account_id
 app.get('/api/user/name', verifyJwtToken, async (req, res) => {
   console.log("Entered /api/user/name route");
