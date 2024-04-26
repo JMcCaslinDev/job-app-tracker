@@ -5,7 +5,10 @@ import '../css/Navbar.css';
 
 const Navbar = () => {
   const handleLogout = () => {
-    // Logout logic here
+    // Remove the token from local storage
+    localStorage.removeItem('token');
+    // Navigate to the landing page
+    navigate('/');
   };
 
   return (
