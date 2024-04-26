@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 
 // Middleware to verify JWT token
 function verifyJwtToken(req, res, next) {
-  console.log("Entered verifyJwtToken function middleware")
+  console.log("Entered verifyJwtToken function middleware");
   const token = req.headers.authorization;
   console.log("Token:", token);
 

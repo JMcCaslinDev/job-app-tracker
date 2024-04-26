@@ -8,10 +8,12 @@ import JobApplicationHistory from './JobApplicationHistory';
 import '../css/Dashboard.css';
 
 const Dashboard = () => {
+  console.log("\nEntered Dashboard.js file\n")
   const [name, setName] = useState({ firstName: '', lastName: '' });
   const [dashboardData, setDashboardData] = useState({});
   const navigate = useNavigate();
 
+  console.log("\n1\n");
   useEffect(() => {
     const token = localStorage.getItem('token');
 
@@ -19,7 +21,7 @@ const Dashboard = () => {
       navigate('/login');
       return;
     }
-
+    console.log("\n2\n");
     const fetchNameAndDashboardData = async () => {
       try {
         console.log("\nAttempting to fetch name and dashboard data\n");
@@ -31,7 +33,7 @@ const Dashboard = () => {
           navigate('/');
           return;
         }
-
+        console.log("\n3\n");
         const nameResponse = await axios.get('/api/user/name', {
           headers: { Authorization: `Bearer ${token}` }
         });
@@ -45,17 +47,17 @@ const Dashboard = () => {
         } else {
           console.error('Unexpected response structure:', nameResponse.data);
         }
-
+        console.log("\n4\n");
         // Fetching dashboard data
         const dashboardResponse = await axios.get('/api/dashboard', {
           headers: { Authorization: `Bearer ${token}` }
         });
-
+        console.log("\n5\n");
         if (dashboardResponse.data) {
           setDashboardData(dashboardResponse.data);
           console.log('Dashboard data fetched successfully:', dashboardResponse.data);
         }
-
+        console.log("\n6\n");
       } catch (error) {
         console.error('Error fetching user data:', error);
         if (error.response && (error.response.status === 401 || error.response.status === 403)) {
@@ -65,10 +67,10 @@ const Dashboard = () => {
         }
       }
     };
-
+    console.log("\n7\n");
     fetchNameAndDashboardData();
   }, [navigate]);
-
+  console.log("\n8\n");
   return (
     <div className="dashboard">
       <Navbar />
