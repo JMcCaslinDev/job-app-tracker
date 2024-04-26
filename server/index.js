@@ -91,7 +91,7 @@ app.get('/api/dashboard', verifyJwtToken, (req, res) => {
 
 
 // Endpoint to get user's first and last name by account_id
-app.get('/api/user/name', async (req, res) => {
+app.get('/api/user/name', verifyJwtToken, async (req, res) => {
   console.log("\nEntered /api/user/name route\n");
   try {
     console.log("Entered /api/user/name route inside try block");
