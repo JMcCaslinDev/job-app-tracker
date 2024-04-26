@@ -86,7 +86,7 @@ app.post('/api/login', async (req, res) => {
 
 
 // Protected dashboard route
-app.get('/api/dashboard', verifyJwtToken, async, (req, res) => {
+app.get('/api/dashboard', verifyJwtToken, (req, res) => {
   // If the user is authenticated, send the dashboard data
   console.log('\n\nWelcome to the dashboard account_id: ', req.account_id, "\n\n")
   res.json({ message: 'Welcome to the dashboard', account_id: req.account_id });
