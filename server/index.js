@@ -28,14 +28,19 @@ if (process.env.NODE_ENV === 'production') {
 // Middleware to verify JWT token
 function verifyJwtToken(req, res, next) {
   const token = req.headers.authorization;
+  console.log("Token:", token);
+
   if (!token) {
+    console.log("No token provided");
     return res.status(401).json({ error: 'No token provided' });
   }
 
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
+      console.log("Invalid token:", err);
       return res.status(401).json({ error: 'Invalid token' });
     }
+    console.log("Decoded token:", decoded);
     req.accountId = decoded.accountId;
     next();
   });
@@ -81,7 +86,7 @@ app.post('/api/login', async (req, res) => {
 
 
 // Protected dashboard route
-app.get('/api/dashboard', verifyJwtToken, (req, res) => {
+app.get('/api/dashboard', verifyJwtToken, async, (req, res) => {
   // If the user is authenticated, send the dashboard data
   console.log('\n\nWelcome to the dashboard account_id: ', req.account_id, "\n\n")
   res.json({ message: 'Welcome to the dashboard', account_id: req.account_id });
@@ -90,8 +95,9 @@ app.get('/api/dashboard', verifyJwtToken, (req, res) => {
 
 // Endpoint to get user's first and last name by account_id
 app.get('/api/user/name', verifyJwtToken, async (req, res) => {
+  console.log("Entered /api/user/name route");
   try {
-    console.log("Entered /api/user/name route");
+    console.log("Entered /api/user/name route inside try block");
     const { accountId } = req; // accountId is set in verifyJwtToken middleware
     console.log("accountId:", accountId);
 
