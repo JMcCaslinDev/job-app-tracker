@@ -1,15 +1,11 @@
 /* Navbar.css */
-
 .navbar {
-    width: 10%; /* Adjust the percentage or set a fixed width like 160px */
-    min-width: 100px; /* Ensure it doesn't get too narrow */
-    background-color: #3d3c42; /* Dark grey */
+    width: 200px; /* Set a fixed width for better consistency */
+    background-color: #3d3c42;
     color: white;
     display: flex;
     flex-direction: column;
     justify-content: start;
-    height: 100%; /* Full height */
-    box-sizing: border-box; /* Include padding in the width */
-    /* Remove border if not needed */
+    height: 100%;
+    box-sizing: border-box;
   }
-  

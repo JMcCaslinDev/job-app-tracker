@@ -1,24 +1,41 @@
 /* NavbarButton.css */
-
 .navbar-button {
     color: #ffffff;
-    background-color: transparent; /* Inherit from navbar */
+    background-color: transparent;
     border: none;
-    border-bottom: 1px solid #504e55; /* Separator between buttons */
     text-align: center;
     cursor: pointer;
     transition: background-color 0.3s ease;
-    width: 100%; /* Ensure it fills the width of the navbar */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    width: 100%;
+    box-sizing: border-box;
+    padding: 20px 10px; /* Add padding for better spacing */
+    position: relative; /* Add position for pseudo-element */
+  }
+  
+  .navbar-button::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background-color: #504e55; /* Separator between buttons */
   }
   
   .navbar-button:hover {
-    background-color: #5c5876; /* Highlight on hover */
+    background-color: #5c5876;
   }
   
   .navbar-button.logout {
-    margin-top: auto; /* Push to the bottom */
-    border-top: 1px solid #504e55; /* Separator on top */
-    border-bottom: none; /* Remove bottom border for last item */
+    margin-top: auto;
   }
   
+  .navbar-button.logout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 10%;
+    right: 10%;
+    height: 1px;
+    background-color: #504e55; /* Separator on top */
+  }
