@@ -22,6 +22,7 @@ const Dashboard = () => {
 
     const fetchNameAndDashboardData = async () => {
       try {
+        console.log("\nAttempting to fetch name and dashboard data\n");
         const decodedToken = jwtDecode(token); // Verify the decoding function based on your package
         const currentTime = Date.now() / 1000;
         if (decodedToken.exp < currentTime) {
@@ -34,7 +35,7 @@ const Dashboard = () => {
         const nameResponse = await axios.get('/api/user/name', {
           headers: { Authorization: `Bearer ${token}` }
         });
-
+        console.log("\nnameResponse: ", nameResponse, "\n");
         if (nameResponse.data && nameResponse.data.firstName) {
           setName({
             firstName: nameResponse.data.firstName,

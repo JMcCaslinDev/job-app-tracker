@@ -99,11 +99,11 @@ app.get('/api/dashboard', verifyJwtToken, (req, res) => {
 
 // Endpoint to get user's first and last name by account_id
 app.get('/api/user/name', verifyJwtToken, async (req, res) => {
-  console.log("Entered /api/user/name route");
+  console.log("\nEntered /api/user/name route\n");
   try {
     console.log("Entered /api/user/name route inside try block");
     const { accountId } = req; // accountId is set in verifyJwtToken middleware
-    console.log("accountId:", accountId);
+    console.log("\naccountId:", accountId, "\n");
 
     const queryResult = await pool.query(
       'SELECT first_name, last_name FROM accounts WHERE account_id = $1',
