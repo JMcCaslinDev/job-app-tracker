@@ -40,6 +40,8 @@ const Dashboard = () => {
             firstName: response.data.firstName,
             lastName: response.data.lastName,
           });
+          console.log("\nresponse.data.firstName: ", response.data.firstName, "\n");
+          console.log("\nresponse.data.lastName: ", response.data.lastName, "\n");
         } else {
           // Handle unexpected response structure
           console.error('Unexpected response structure:', response.data);
