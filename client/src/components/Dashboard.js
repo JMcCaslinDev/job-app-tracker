@@ -79,9 +79,6 @@ const Dashboard = () => {
         <div className="welcome-banner">
           Welcome back, {name.firstName} {name.lastName}!
         </div>
-        <div className="dashboard-info">
-          Dashboard Message: {dashboardData.message || 'No specific dashboard data.'}
-        </div>
         <JobApplicationActions />
         <JobApplicationHistory />
       </div>
