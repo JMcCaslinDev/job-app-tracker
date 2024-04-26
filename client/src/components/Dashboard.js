@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Ensure correct import based on actual library
 import axios from 'axios';
 import Navbar from './Navbar';
 import JobApplicationActions from './JobApplicationActions';
@@ -22,9 +22,10 @@ const Dashboard = () => {
 
     const fetchNameAndDashboardData = async () => {
       try {
-        const decodedToken = jwtDecode(token);
+        const decodedToken = jwtDecode(token); // Verify the decoding function based on your package
         const currentTime = Date.now() / 1000;
         if (decodedToken.exp < currentTime) {
+          console.log('Token expired. Redirecting to login.');
           localStorage.removeItem('token');
           navigate('/');
           return;
@@ -39,6 +40,7 @@ const Dashboard = () => {
             firstName: nameResponse.data.firstName,
             lastName: nameResponse.data.lastName,
           });
+          console.log('User name fetched successfully:', nameResponse.data);
         } else {
           console.error('Unexpected response structure:', nameResponse.data);
         }
@@ -50,12 +52,16 @@ const Dashboard = () => {
 
         if (dashboardResponse.data) {
           setDashboardData(dashboardResponse.data);
+          console.log('Dashboard data fetched successfully:', dashboardResponse.data);
         }
 
       } catch (error) {
         console.error('Error fetching user data:', error);
-        localStorage.removeItem('token');
-        navigate('/login');
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          console.log('Authentication error. Redirecting to login.');
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
       }
     };
 
@@ -70,7 +76,6 @@ const Dashboard = () => {
           Welcome back, {name.firstName} {name.lastName}!
         </div>
         <div className="dashboard-info">
-          {/* Displaying dashboard data */}
           Dashboard Message: {dashboardData.message || 'No specific dashboard data.'}
         </div>
         <JobApplicationActions />
