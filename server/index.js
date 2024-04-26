@@ -91,20 +91,25 @@ app.get('/api/dashboard', verifyJwtToken, (req, res) => {
 // Endpoint to get user's first and last name by account_id
 app.get('/api/user/name', verifyJwtToken, async (req, res) => {
   try {
-    console.log("\nEntered /api/user/name route\n")
+    console.log("Entered /api/user/name route");
     const { accountId } = req; // accountId is set in verifyJwtToken middleware
+    console.log("accountId:", accountId);
+
     const queryResult = await pool.query(
       'SELECT first_name, last_name FROM accounts WHERE account_id = $1',
       [accountId]
     );
-    
+    console.log("queryResult:", queryResult);
+
     if (queryResult.rows.length === 0) {
+      console.log("User not found");
       return res.status(404).json({ error: 'User not found' });
     }
 
     const { first_name: firstName, last_name: lastName } = queryResult.rows[0];
-    console.log("\nFirstname: ", firstName, "\n");
-    console.log("\nLastName: ", lastName, "\n");
+    console.log("firstName:", firstName);
+    console.log("lastName:", lastName);
+
     res.json({ firstName, lastName });
   } catch (error) {
     console.error('Error retrieving user name:', error);
