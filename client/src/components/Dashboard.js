@@ -44,7 +44,7 @@ const Dashboard = () => {
           firstName: response.data.firstName,
           lastName: response.data.lastName,
         });
-        console.log("\nfirstName: ", firstName, "\n");
+        console.log("\response.data.firstName: ", response.data.firstName, "\n");
       } catch (error) {
         // If token is invalid, expired or if there is an error fetching the name, navigate to login
         console.error('Error: ', error);
