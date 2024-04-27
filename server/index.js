@@ -126,11 +126,64 @@ app.get('/api/user/name', verifyJwtToken, async (req, res) => {
 // Create a new job application for a user
 app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   try {
-    const { company, position, status, applicationDate, jobDescription, notes } = req.body;
+    const {
+      company_name,
+      job_title,
+      application_status,
+      date_applied,
+      job_description,
+      notes,
+      application_method,
+      pay_amount,
+      job_posting_url,
+      pay_type,
+      employment_type,
+      work_location_mode,
+      location,
+      experience_level,
+      pinned,
+    } = req.body;
+
     const result = await pool.query(
-      'INSERT INTO job_applications (account_id, company, position, status, application_date, job_description, notes) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *',
-      [req.accountId, company, position, status, applicationDate, jobDescription, notes]
+      `INSERT INTO job_applications (
+        account_id,
+        company_name,
+        job_title,
+        application_status,
+        date_applied,
+        job_description,
+        notes,
+        application_method,
+        pay_amount,
+        job_posting_url,
+        pay_type,
+        employment_type,
+        work_location_mode,
+        location,
+        experience_level,
+        pinned
+      ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16)
+      RETURNING *`,
+      [
+        req.accountId,
+        company_name,
+        job_title,
+        application_status,
+        date_applied,
+        job_description,
+        notes,
+        application_method,
+        pay_amount,
+        job_posting_url,
+        pay_type,
+        employment_type,
+        work_location_mode,
+        location,
+        experience_level,
+        pinned,
+      ]
     );
+
     const jobApplication = result.rows[0];
     res.status(201).json(jobApplication);
   } catch (error) {
