@@ -192,8 +192,9 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   }
 });
 
+
 // Get all job applications for a user
-app.get('/api/job-applications', verifyJwtToken, async (req, res) => {
+app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res) => {
   try {
     const result = await pool.query('SELECT * FROM job_applications WHERE account_id = $1', [req.accountId]);
     const jobApplications = result.rows;
@@ -203,6 +204,7 @@ app.get('/api/job-applications', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 // Update a job application by ID
 app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {

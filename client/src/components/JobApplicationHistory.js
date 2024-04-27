@@ -1,22 +1,48 @@
 // components/JobApplicationHistory.js
-import React, { useState } from 'react';
-import '../css/Dashboard.css'; // Import the CSS if needed
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import JobApplicationRow from './JobApplicationRow';
+import '../css/Dashboard.css';
 
 const JobApplicationHistory = () => {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [jobApplications, setJobApplications] = useState([]);
 
-  const handleSearch = () => {
-    // Perform search logic based on searchTerm
-  };
+  useEffect(() => {
+    const fetchJobApplications = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get('/api/user/return-all/job-applications', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setJobApplications(response.data);
+      } catch (error) {
+        console.error('Error fetching job applications:', error);
+      }
+    };
 
-  const handleAddManual = () => {
-    // Handle adding manual job application entry
-  };
+    fetchJobApplications();
+  }, []);
 
   return (
     <div className="job-application-history">
       <div className="history-section">
-        {/* Display job application history */}
+        <table>
+          <thead>
+            <tr>
+              <th>Company</th>
+              <th>Job Title</th>
+              <th>Date Applied</th>
+              <th>Status</th>
+              <th>Type</th>
+              <th>Pay</th>
+            </tr>
+          </thead>
+          <tbody>
+            {jobApplications.map((application) => (
+              <JobApplicationRow key={application.index} application={application} />
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
