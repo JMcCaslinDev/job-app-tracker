@@ -1,25 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/AddJobApplicationModal.css';
 
+const initialFormData = {
+  company_name: '',
+  job_title: '',
+  application_status: '',
+  date_applied: '',
+  job_description: '',
+  notes: '',
+  application_method: '',
+  pay_amount: 0,
+  job_posting_url: '',
+  pay_type: '',
+  employment_type: '',
+  work_location_mode: '',
+  location: '',
+  experience_level: '',
+  pinned: false,
+};
+
 const AddJobApplicationModal = ({ isOpen, onClose }) => {
-  const [formData, setFormData] = useState({
-    company_name: '',
-    job_title: '',
-    application_status: '',
-    date_applied: '',
-    job_description: '',
-    notes: '',
-    application_method: '',
-    pay_amount: 0,
-    job_posting_url: '',
-    pay_type: '',
-    employment_type: '',
-    work_location_mode: '',
-    location: '',
-    experience_level: '',
-    pinned: false,
-  });
+  const [formData, setFormData] = useState(initialFormData);
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(initialFormData);
+    }
+  }, [isOpen]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -34,6 +42,7 @@ const AddJobApplicationModal = ({ isOpen, onClose }) => {
       await axios.post('/api/job-applications', formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      setFormData(initialFormData);
       onClose();
     } catch (error) {
       console.error('Error creating job application:', error);
