@@ -47,7 +47,66 @@ const AddJobApplicationModal = ({ isOpen, onClose }) => {
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>Add Job Application</h2>
         <form onSubmit={handleSubmit}>
-          {/* Add form fields for all the columns in the job_applications table */}
+          <label>
+            Company Name:
+            <input type="text" name="company_name" value={formData.company_name} onChange={handleChange} />
+          </label>
+          <label>
+            Job Title:
+            <input type="text" name="job_title" value={formData.job_title} onChange={handleChange} />
+          </label>
+          <label>
+            Application Status:
+            <input type="text" name="application_status" value={formData.application_status} onChange={handleChange} />
+          </label>
+          <label>
+            Date Applied:
+            <input type="date" name="date_applied" value={formData.date_applied} onChange={handleChange} />
+          </label>
+          <label>
+            Job Description:
+            <textarea name="job_description" value={formData.job_description} onChange={handleChange}></textarea>
+          </label>
+          <label>
+            Notes:
+            <textarea name="notes" value={formData.notes} onChange={handleChange}></textarea>
+          </label>
+          <label>
+            Application Method:
+            <input type="text" name="application_method" value={formData.application_method} onChange={handleChange} />
+          </label>
+          <label>
+            Pay Amount:
+            <input type="number" name="pay_amount" value={formData.pay_amount} onChange={handleChange} />
+          </label>
+          <label>
+            Job Posting URL:
+            <input type="text" name="job_posting_url" value={formData.job_posting_url} onChange={handleChange} />
+          </label>
+          <label>
+            Pay Type:
+            <input type="text" name="pay_type" value={formData.pay_type} onChange={handleChange} />
+          </label>
+          <label>
+            Employment Type:
+            <input type="text" name="employment_type" value={formData.employment_type} onChange={handleChange} />
+          </label>
+          <label>
+            Work Location Mode:
+            <input type="text" name="work_location_mode" value={formData.work_location_mode} onChange={handleChange} />
+          </label>
+          <label>
+            Location:
+            <input type="text" name="location" value={formData.location} onChange={handleChange} />
+          </label>
+          <label>
+            Experience Level:
+            <input type="text" name="experience_level" value={formData.experience_level} onChange={handleChange} />
+          </label>
+          <label>
+            Pinned:
+            <input type="checkbox" name="pinned" checked={formData.pinned} onChange={handleChange} />
+          </label>
           <button type="submit">Save</button>
         </form>
       </div>
