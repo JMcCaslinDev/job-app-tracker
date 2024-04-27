@@ -26,23 +26,17 @@ const JobApplicationHistory = () => {
   return (
     <div className="job-application-history">
       <div className="history-section">
-        <table>
-          <thead>
-            <tr>
-              <th>Company</th>
-              <th>Job Title</th>
-              <th>Date Applied</th>
-              <th>Status</th>
-              <th>Type</th>
-              <th>Pay</th>
-            </tr>
-          </thead>
-          <tbody>
-            {jobApplications.map((application) => (
-              <JobApplicationRow key={application.index} application={application} />
-            ))}
-          </tbody>
-        </table>
+        <div className="table-header">
+          <div className="header-item">Company</div>
+          <div className="header-item">Job Title</div>
+          <div className="header-item">Date Applied</div>
+          <div className="header-item">Status</div>
+          <div className="header-item">Type</div>
+          <div className="header-item">Pay</div>
+        </div>
+        {jobApplications.map((application) => (
+          <JobApplicationRow key={application.index} application={application} />
+        ))}
       </div>
     </div>
   );
