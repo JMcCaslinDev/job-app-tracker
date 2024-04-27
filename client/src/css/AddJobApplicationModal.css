@@ -16,8 +16,52 @@
     background-color: white;
     padding: 2rem;
     border-radius: 4px;
-    width: 400px;
+    width: 500px;
     max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
   }
   
-  /* Add more styles for the form fields and layout */
+  .modal-content h2 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    color: #333;
+  }
+  
+  .modal-content form {
+    display: grid;
+    grid-gap: 1rem;
+  }
+  
+  .modal-content label {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 0.5rem;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .modal-content input,
+  .modal-content textarea {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  .modal-content button[type="submit"] {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .modal-content button[type="submit"]:hover {
+    background-color: #0056b3;
+  }
