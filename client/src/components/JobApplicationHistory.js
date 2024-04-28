@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import JobApplicationRow from './JobApplicationRow';
-// import '../css/JobApplicationHistory.css';
+import '../css/JobApplicationHistory.css';
 
 const JobApplicationHistory = () => {
   const [jobApplications, setJobApplications] = useState([]);
