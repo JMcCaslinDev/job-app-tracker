@@ -23,6 +23,7 @@ const JobApplicationHistory = () => {
     fetchJobApplications();
   }, []);
 
+  
   return (
     <div className="job-application-history">
       <div className="history-section">
