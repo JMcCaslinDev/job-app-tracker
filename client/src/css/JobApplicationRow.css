@@ -7,10 +7,15 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 10px;
   padding: 10px;
-  color: #333; /* Add this line to change the text color */
+  color: #333;
 }
 
 .row-item {
   flex: 1;
   text-align: left;
+  padding-left: 10px; /* Add padding on the left side of each row item */
+}
+
+.row-item:first-child {
+  padding-left: 20px; /* Add extra padding to the first row item (company name) */
 }

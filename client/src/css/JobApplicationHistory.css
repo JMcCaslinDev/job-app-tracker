@@ -1,6 +1,7 @@
 /* css/JobApplicationHistory.css */
 .job-application-history {
     width: 100%;
+    padding: 0 20px; /* Add padding on the left and right */
   }
   
   .history-section {
@@ -10,18 +11,17 @@
   
   .table-header {
     display: flex;
-    justify-content: space-between; /* Space the header items evenly */
-    background-color: #f2f2f2; /* Consider a darker shade if needed */
+    justify-content: space-between;
+    background-color: #fff; /* Remove the background color */
     font-weight: bold;
-    padding: 10px;
-    border-radius: 10px 10px 0 0; /* Rounded corners at the top */
-    color: #333; /* Dark color for text, update as needed for contrast */
+    padding: 10px 0; /* Adjust padding to remove vertical space */
+    color: #333;
+    border-bottom: 2px solid #f2f2f2; /* Add a bottom border */
   }
   
   .header-item {
     flex-grow: 1;
-    text-align: center;
+    text-align: left; /* Align header items to the left */
     padding: 0 10px;
     box-sizing: border-box;
   }
-  
