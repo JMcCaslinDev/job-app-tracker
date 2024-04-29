@@ -337,19 +337,20 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     }
 
     // Calculate the start and end of the user's current day in their timezone
-    const startOfDay = moment.tz(userTimezone).startOf('day').utc().format();
-    const endOfDay = moment.tz(userTimezone).endOf('day').utc().format();
+    const startOfDay = moment.tz(userTimezone).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const endOfDay = moment.tz(userTimezone).endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
-    console.log(`Start of day in UTC: ${startOfDay}`);
-    console.log(`End of day in UTC: ${endOfDay}`);
+    console.log(`User timezone: ${userTimezone}`);
+    console.log(`Start of day in local timezone: ${startOfDay}`);
+    console.log(`End of day in local timezone: ${endOfDay}`);
 
     const result = await pool.query(`
       SELECT 
-        COALESCE(a.daily_application_goal - COUNT(ja.application_id), a.daily_application_goal) AS applications_left
+        COALESCE(a.daily_application_goal - COUNT(j.index), a.daily_application_goal) AS applications_left
       FROM accounts a
-      LEFT JOIN job_applications ja ON a.account_id = ja.account_id 
-        AND ja.date_applied >= $1
-        AND ja.date_applied <= $2
+      LEFT JOIN job_applications j ON a.account_id = j.account_id 
+        AND j.date_applied >= $1 AT TIME ZONE 'UTC' 
+        AND j.date_applied <= $2 AT TIME ZONE 'UTC' 
       WHERE a.account_id = $3
       GROUP BY a.daily_application_goal, a.account_id
     `, [startOfDay, endOfDay, accountId]);
@@ -368,6 +369,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
