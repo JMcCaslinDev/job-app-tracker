@@ -1,7 +1,7 @@
 // Dashboard.js
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode';
+import jwtDecode from 'jwt-decode';
 import axios from 'axios';
 import Navbar from './Navbar';
 import JobApplicationActions from './JobApplicationActions';
@@ -13,6 +13,8 @@ import '../css/Dashboard.css';
 const Dashboard = () => {
   const [name, setName] = useState({ firstName: '', lastName: '' });
   const [dashboardData, setDashboardData] = useState([]);
+  const [dailyGoal, setDailyGoal] = useState(0);
+  const [applicationsLeft, setApplicationsLeft] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedApplication, setSelectedApplication] = useState(null);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -21,7 +23,6 @@ const Dashboard = () => {
   const location = useLocation();
 
   const fetchName = useCallback(async (token) => {
-    console.log("\nEntered fetchName\n");
     try {
       const nameResponse = await axios.get('/api/user/name', {
         headers: { Authorization: `Bearer ${token}` },
@@ -31,8 +32,6 @@ const Dashboard = () => {
           firstName: nameResponse.data.firstName,
           lastName: nameResponse.data.lastName,
         });
-      } else {
-        throw new Error('Unexpected response structure:', nameResponse.data);
       }
     } catch (error) {
       console.error('Error fetching user name:', error);
@@ -40,54 +39,56 @@ const Dashboard = () => {
   }, []);
 
   const fetchDashboardData = useCallback(async (token) => {
-    console.log("\nEntered fetchDashBoardData\n");
     try {
       const dashboardResponse = await axios.get('/api/user/return-all/job-applications', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (dashboardResponse.data) {
-        setDashboardData(dashboardResponse.data);
-        console.log('Dashboard data fetched successfully:', dashboardResponse.data);
-      } else {
-        console.error('Unexpected response or no data:', dashboardResponse);
-      }
+      setDashboardData(dashboardResponse.data);
+
+      const goalResponse = await axios.get('/api/user/daily-goal', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setDailyGoal(goalResponse.data.dailyGoal);
+
+      const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const applicationsResponse = await axios.get('/api/user/applications-left', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'X-User-Timezone': userTimezone,
+        },
+      });
+      setApplicationsLeft(applicationsResponse.data.applicationsLeft);
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
     }
   }, []);
 
-  const refreshDashboardData = useCallback(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      fetchDashboardData(token);
-    }
-  }, [fetchDashboardData]);
-
-  const fetchData = useCallback(async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/');
-      return;
-    }
-    const decodedToken = jwtDecode(token);
-    const currentTime = Date.now() / 1000;
-    if (decodedToken.exp < currentTime) {
-      localStorage.removeItem('token');
-      navigate('/');
-      return;
-    }
-    await fetchName(token);
-    await fetchDashboardData(token);
-  }, [navigate, fetchName, fetchDashboardData]);
-
   useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('token');
+      if (token) {
+        const decodedToken = jwtDecode(token);
+        const currentTime = Date.now() / 1000;
+        if (decodedToken.exp < currentTime) {
+          localStorage.removeItem('token');
+          navigate('/');
+          return;
+        }
+        await fetchName(token);
+        await fetchDashboardData(token);
+      } else {
+        navigate('/');
+      }
+    };
+
     fetchData();
-  }, [fetchData, location.key]);
+  }, [navigate, fetchName, fetchDashboardData, location.key]);
 
   const openModal = () => setIsModalOpen(true);
+
   const closeModal = () => {
     setIsModalOpen(false);
-    refreshDashboardData();
+    fetchDashboardData(localStorage.getItem('token')); // refresh the dashboard data
   };
 
   const openEditModal = (application) => {
@@ -98,7 +99,7 @@ const Dashboard = () => {
   const closeEditModal = () => {
     setSelectedApplication(null);
     setIsEditModalOpen(false);
-    refreshDashboardData();
+    fetchDashboardData(localStorage.getItem('token')); // refresh the dashboard data
   };
 
   const handleDelete = async () => {
@@ -119,20 +120,20 @@ const Dashboard = () => {
     <div className="dashboard">
       <Navbar />
       <div className="dashboard-main">
-        <WelcomeBanner name={name} />
+        <WelcomeBanner name={name} dailyGoal={dailyGoal} applicationsLeft={applicationsLeft} />
         <JobApplicationActions openModal={openModal} />
         <JobApplicationHistory dashboardData={dashboardData} onEdit={openEditModal} />
       </div>
       <AddJobApplicationModal
         isOpen={isModalOpen}
         onClose={closeModal}
-        onAddSuccess={refreshDashboardData}
+        onAddSuccess={() => {}} // The closeModal already calls fetchDashboardData so we don't need this here
       />
       {selectedApplication && (
         <AddJobApplicationModal
           isOpen={isEditModalOpen}
           onClose={closeEditModal}
-          onAddSuccess={refreshDashboardData}
+          onAddSuccess={() => {}} // The closeEditModal already calls fetchDashboardData so we don't need this here
           initialFormData={selectedApplication}
           onDelete={handleDelete}
         />
