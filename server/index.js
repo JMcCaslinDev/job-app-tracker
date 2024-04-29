@@ -193,24 +193,12 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
 });
 
 
-// Get all job applications for a user with a time zone adjustment
+// Get all job applications for a user
 app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res) => {
   try {
-    const userTimezone = req.headers['x-user-timezone'] || 'UTC'; // Use UTC as default if no timezone is provided
-    const result = await pool.query(`
-      SELECT index, company_name, job_title, application_status,
-        (date_applied AT TIME ZONE $2) as date_applied,
-        job_description, notes
-      FROM job_applications
-      WHERE account_id = $1
-    `, [req.accountId, userTimezone]);
+    const result = await pool.query('SELECT * FROM job_applications WHERE account_id = $1', [req.accountId]);
     const jobApplications = result.rows;
-    res.json(jobApplications.map(application => {
-      return {
-        ...application,
-        date_applied: new Date(application.date_applied).toISOString()
-      };
-    }));
+    res.json(jobApplications);
   } catch (error) {
     console.error('Error retrieving job applications:', error);
     res.status(500).json({ error: 'Internal server error' });
