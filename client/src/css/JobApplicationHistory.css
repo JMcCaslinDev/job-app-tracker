@@ -1,7 +1,9 @@
-/* css/JobApplicationHistory.css */
+/* JobApplicationHistory.css */
 .job-application-history {
-    width: 100%;
-    padding: 0 20px; /* Add padding on the left and right */
+    width: calc(100% - 100px); /* Assuming the navbar is 100px wide */
+    margin-left: 100px; /* Push the content to the right, away from the navbar */
+    padding: 0 20px; /* Keep your existing padding */
+    box-sizing: border-box; /* Ensure padding is included in width calculation */
   }
   
   .history-section {
@@ -13,14 +15,12 @@
     display: flex;
     justify-content: space-between;
     font-weight: bold;
-    padding: 10px 0; /* Adjust padding to remove vertical space */
-   
-   
+    padding: 10px 0;
   }
   
   .header-item {
     flex-grow: 1;
-    text-align: left; /* Align header items to the left */
+    text-align: left;
     padding: 0 10px;
     box-sizing: border-box;
   }
