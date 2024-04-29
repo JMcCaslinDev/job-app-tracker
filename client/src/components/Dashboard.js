@@ -1,7 +1,7 @@
 // Dashboard.js
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import Navbar from './Navbar';
 import JobApplicationActions from './JobApplicationActions';
