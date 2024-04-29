@@ -20,14 +20,16 @@ const initialFormData = {
   pinned: false,
 };
 
-const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess }) => {
-  const [formData, setFormData] = useState(initialFormData);
+const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData, onDelete }) => {
+  const [formData, setFormData] = useState(initialFormData || initialFormData);
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && initialFormData) {
+      setFormData(initialFormData);
+    } else {
       setFormData(initialFormData);
     }
-  }, [isOpen]);
+  }, [isOpen, initialFormData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -39,18 +41,24 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.post('/api/job-applications', formData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      let response;
+      if (initialFormData) {
+        response = await axios.put(`/api/job-applications/${initialFormData.id}`, formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } else {
+        response = await axios.post('/api/job-applications', formData, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
 
-      // If the request is successful, reset the form data, close the modal and trigger the refresh.
-      if (response.status === 201) {
-        setFormData(initialFormData);
+      if (response.status === 200 || response.status === 201) {
+        setFormData(initialFormData || initialFormData);
         onClose();
-        onAddSuccess(); // Trigger refresh after successful addition
+        onAddSuccess();
       }
     } catch (error) {
-      console.error('Error creating job application:', error);
+      console.error('Error updating/creating job application:', error);
     }
   };
 
@@ -59,7 +67,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess }) => {
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>Add Job Application</h2>
+        <h2>{initialFormData ? 'Edit' : 'Add'} Job Application</h2>
         <form onSubmit={handleSubmit}>
           <label>
             Company Name:
@@ -122,6 +130,9 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess }) => {
             <input type="checkbox" name="pinned" checked={formData.pinned} onChange={handleChange} />
           </label>
           <button type="submit">Save</button>
+          {initialFormData && (
+            <button type="button" onClick={onDelete}>Delete</button>
+          )}
         </form>
       </div>
     </div>

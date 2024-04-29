@@ -1,9 +1,8 @@
-// components/JobApplicationHistory.js
 import React from 'react';
 import JobApplicationRow from './JobApplicationRow';
 import '../css/JobApplicationHistory.css';
 
-const JobApplicationHistory = ({ dashboardData }) => {
+const JobApplicationHistory = ({ dashboardData, onEdit }) => {
   return (
     <div className="job-application-history">
       <div className="history-section">
@@ -16,8 +15,7 @@ const JobApplicationHistory = ({ dashboardData }) => {
           <div className="header-item">Pay</div>
         </div>
         {dashboardData.map((application, index) => (
-          // Ensure that you use a unique identifier from application instead of index if available
-          <JobApplicationRow key={index} application={application} />
+          <JobApplicationRow key={index} application={application} onEdit={onEdit} />
         ))}
       </div>
     </div>

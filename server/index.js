@@ -210,11 +210,65 @@ app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res
 app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const { company, position, status, applicationDate, jobDescription, notes } = req.body;
+    const {
+      company_name,
+      job_title,
+      application_status,
+      date_applied,
+      job_description,
+      notes,
+      application_method,
+      pay_amount,
+      job_posting_url,
+      pay_type,
+      employment_type,
+      work_location_mode,
+      location,
+      experience_level,
+      pinned,
+    } = req.body;
+
     const result = await pool.query(
-      'UPDATE job_applications SET company = $1, position = $2, status = $3, application_date = $4, job_description = $5, notes = $6, updated_at = CURRENT_TIMESTAMP WHERE id = $7 AND account_id = $8 RETURNING *',
-      [company, position, status, applicationDate, jobDescription, notes, id, req.accountId]
+      `UPDATE job_applications 
+      SET company_name = $1,
+        job_title = $2,
+        application_status = $3,
+        date_applied = $4,
+        job_description = $5,
+        notes = $6,
+        application_method = $7,
+        pay_amount = $8,
+        job_posting_url = $9,
+        pay_type = $10,
+        employment_type = $11,
+        work_location_mode = $12,
+        location = $13,
+        experience_level = $14,
+        pinned = $15,
+        updated_at = CURRENT_TIMESTAMP
+      WHERE index = $16 AND account_id = $17
+      RETURNING *`,
+      [
+        company_name,
+        job_title,
+        application_status,
+        date_applied,
+        job_description,
+        notes,
+        application_method,
+        pay_amount,
+        job_posting_url,
+        pay_type,
+        employment_type,
+        work_location_mode,
+        location,
+        experience_level,
+        pinned,
+        id,
+        req.accountId,
+      ]
     );
+
     const updatedJobApplication = result.rows[0];
     if (updatedJobApplication) {
       res.json(updatedJobApplication);
@@ -231,7 +285,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
 app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
   try {
     const { id } = req.params;
-    const result = await pool.query('DELETE FROM job_applications WHERE id = $1 AND account_id = $2 RETURNING *', [
+    const result = await pool.query('DELETE FROM job_applications WHERE index = $1 AND account_id = $2 RETURNING *', [
       id,
       req.accountId,
     ]);

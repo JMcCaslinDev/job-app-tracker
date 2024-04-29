@@ -12,6 +12,9 @@ const Dashboard = () => {
   const [name, setName] = useState({ firstName: '', lastName: '' });
   const [dashboardData, setDashboardData] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedApplication, setSelectedApplication] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -51,7 +54,6 @@ const Dashboard = () => {
     }
   }, []);
 
-  // Refreshes the dashboard data from the backend
   const refreshDashboardData = useCallback(() => {
     const token = localStorage.getItem('token');
     if (token) {
@@ -65,7 +67,6 @@ const Dashboard = () => {
       navigate('/');
       return;
     }
-
     const decodedToken = jwtDecode(token);
     const currentTime = Date.now() / 1000;
     if (decodedToken.exp < currentTime) {
@@ -73,7 +74,6 @@ const Dashboard = () => {
       navigate('/');
       return;
     }
-
     await fetchName(token);
     await fetchDashboardData(token);
   }, [navigate, fetchName, fetchDashboardData]);
@@ -83,11 +83,34 @@ const Dashboard = () => {
   }, [fetchData, location.key]);
 
   const openModal = () => setIsModalOpen(true);
-  
-  // Update closeModal to refresh data after closing the modal
   const closeModal = () => {
     setIsModalOpen(false);
     refreshDashboardData();
+  };
+
+  const openEditModal = (application) => {
+    setSelectedApplication(application);
+    setIsEditModalOpen(true);
+  };
+
+  const closeEditModal = () => {
+    setSelectedApplication(null);
+    setIsEditModalOpen(false);
+    refreshDashboardData();
+  };
+
+  const handleDelete = async () => {
+    if (window.confirm('Are you sure you want to delete this job application?')) {
+      try {
+        const token = localStorage.getItem('token');
+        await axios.delete(`/api/job-applications/${selectedApplication.id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        closeEditModal();
+      } catch (error) {
+        console.error('Error deleting job application:', error);
+      }
+    }
   };
 
   return (
@@ -98,9 +121,20 @@ const Dashboard = () => {
           Welcome back, {name.firstName} {name.lastName}!
         </div>
         <JobApplicationActions openModal={openModal} />
-        <JobApplicationHistory dashboardData={dashboardData} />
+        <JobApplicationHistory dashboardData={dashboardData} onEdit={openEditModal} />
       </div>
-      <AddJobApplicationModal isOpen={isModalOpen} onClose={closeModal} onAddSuccess={refreshDashboardData} />
+      <AddJobApplicationModal
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        onAddSuccess={refreshDashboardData}
+      />
+      <AddJobApplicationModal
+        isOpen={isEditModalOpen}
+        onClose={closeEditModal}
+        onAddSuccess={refreshDashboardData}
+        initialFormData={selectedApplication}
+        onDelete={handleDelete}
+      />
     </div>
   );
 };
