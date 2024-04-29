@@ -242,7 +242,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
       SET company_name = $1,
         job_title = $2,
         application_status = $3,
-        date_applied = $4, // Use the converted UTC date here
+        date_applied = $4, -- Use the converted UTC date here
         job_description = $5,
         notes = $6,
         application_method = $7,
@@ -255,13 +255,13 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
         experience_level = $14,
         pinned = $15,
         updated_at = CURRENT_TIMESTAMP
-      WHERE index = $16 AND account_id = $17
+      WHERE "index" = $16 AND account_id = $17
       RETURNING *`,
       [
         company_name,
         job_title,
         application_status,
-        dateInUTC, // Use the converted UTC date here
+        dateInUTC,
         job_description,
         notes,
         application_method,
@@ -273,7 +273,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
         location,
         experience_level,
         pinned,
-        req.params.id,
+        parseInt(req.params.id, 10), // Ensure that the id is an integer
         req.accountId,
       ]
     );
@@ -289,6 +289,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 // Delete a job application by ID
