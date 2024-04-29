@@ -7,16 +7,16 @@
   .url-input-section {
     display: flex;
     align-items: center;
-    gap: 10px; /* Space between the URL input and the Auto Add button */
+    gap: 20px; /* Space between the URL input and the Auto Add button */
   }
   
   .url-input {
-    width: 150%; /* Make the URL input 1.5 times wider */
+    width: 400px; 
     padding: 8px 12px; /* Add some padding inside the input */
   }
   
   button {
-    padding: 10px 15px; /* Padding inside the buttons */
+    padding: 10px 10px; /* Padding inside the buttons */
     cursor: pointer;
     /* Add additional styles for your buttons here */
   }
