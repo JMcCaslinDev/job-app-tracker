@@ -24,6 +24,7 @@ const WelcomeBanner = ({ name }) => {
         try {
           const token = localStorage.getItem('token');
           const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          console.log(`Fetching applications left for timezone: ${userTimezone}`); // For debugging
           const response = await axios.get('/api/user/applications-left', {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -33,9 +34,10 @@ const WelcomeBanner = ({ name }) => {
           console.log('Applications left response:', response.data);
           setApplicationsLeft(response.data.applicationsLeft);
         } catch (error) {
-          console.error('Error fetching applications left:', error);
+          console.error('Error fetching applications left:', error.response ? error.response.data : error);
         }
       };
+      
 
     fetchDailyGoal();
     fetchApplicationsLeft();
@@ -47,7 +49,7 @@ const WelcomeBanner = ({ name }) => {
         Welcome back, {name.firstName} {name.lastName}!
       </div>
       <div className="daily-goal">
-        {applicationsLeft} applications left today (Daily Goal: {dailyGoal})
+        {applicationsLeft}/{dailyGoal} applications tracked!
       </div>
     </div>
   );
