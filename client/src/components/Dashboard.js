@@ -18,7 +18,9 @@ const Dashboard = () => {
   console.log("\n1\n");
 
   useEffect(() => {
+    console.log("\nEntered useEffect\n");
     const fetchData = async () => {
+      console.log("\nEntered fetchData\n");
       const token = localStorage.getItem('token');
       console.log("\nTOKEN: ", token, "\n");
       if (!token) {
