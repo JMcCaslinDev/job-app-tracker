@@ -26,7 +26,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
 
   useEffect(() => {
     if (isOpen && initialData) {
-      // When editing, make sure to convert the UTC date back to local time
+      // When editing, convert the UTC date back to local time
       const localTime = moment.utc(initialData.date_applied).local().format('YYYY-MM-DD');
       setFormData({ ...initialData, date_applied: localTime });
     } else {
@@ -45,18 +45,19 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
     try {
       const token = localStorage.getItem('token');
       const userTimezone = moment.tz.guess(); // Guess the user's timezone or obtain it from the browser
-      let response;
-
+      
+      // Append 'T00:00:00' to ensure the time part is at midnight
+      const datetimeApplied = `${formData.date_applied}T00:00:00`;
       // When saving, convert local time to UTC
-      const dateInUTC = moment.tz(formData.date_applied, userTimezone).utc().format();
+      const datetimeInUTC = moment.tz(datetimeApplied, userTimezone).utc().format();
 
-      // Include timezone in your request payload
       const payload = {
         ...formData,
-        date_applied: dateInUTC, // Use the UTC time for date_applied
+        date_applied: datetimeInUTC, // Use the UTC time for date_applied
         userTimezone,
       };
 
+      let response;
       if (initialData) {
         response = await axios.put(`/api/job-applications/${initialData.index}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
@@ -68,6 +69,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
       }
 
       if (response.status === 200 || response.status === 201) {
+        setFormData(initialFormData); // Reset form data after successful add/edit
         onClose();
         onAddSuccess();
       }
