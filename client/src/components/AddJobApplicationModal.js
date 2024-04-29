@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/AddJobApplicationModal.css';
+import moment from 'moment-timezone'; // Ensure you import moment-timezone
 
 const initialFormData = {
   company_name: '',
@@ -25,7 +26,9 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
 
   useEffect(() => {
     if (isOpen && initialData) {
-      setFormData(initialData);
+      // When editing, make sure to convert the UTC date back to local time
+      const localTime = moment.utc(initialData.date_applied).local().format('YYYY-MM-DD');
+      setFormData({ ...initialData, date_applied: localTime });
     } else {
       setFormData(initialFormData);
     }
@@ -41,19 +44,30 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
+      const userTimezone = moment.tz.guess(); // Guess the user's timezone or obtain it from the browser
       let response;
+
+      // When saving, convert local time to UTC
+      const dateInUTC = moment.tz(formData.date_applied, userTimezone).utc().format();
+
+      // Include timezone in your request payload
+      const payload = {
+        ...formData,
+        date_applied: dateInUTC, // Use the UTC time for date_applied
+        userTimezone,
+      };
+
       if (initialData) {
-        response = await axios.put(`/api/job-applications/${initialData.index}`, formData, {
+        response = await axios.put(`/api/job-applications/${initialData.index}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
-        response = await axios.post('/api/job-applications', formData, {
+        response = await axios.post('/api/job-applications', payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }
 
       if (response.status === 200 || response.status === 201) {
-        setFormData(initialData || initialFormData);
         onClose();
         onAddSuccess();
       }

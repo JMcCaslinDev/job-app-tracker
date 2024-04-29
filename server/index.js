@@ -3,6 +3,8 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
+const moment = require('moment-timezone');
+
 
 const app = express();
 app.use(express.json());
@@ -123,7 +125,7 @@ app.get('/api/user/name', verifyJwtToken, async (req, res) => {
 
 
 
-// Create a new job application for a user
+// POST endpoint for creating a new job application
 app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   try {
     const {
@@ -142,7 +144,11 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
       location,
       experience_level,
       pinned,
+      userTimezone,
     } = req.body;
+
+    // Convert the local date to UTC
+    const dateInUTC = moment.tz(date_applied, userTimezone).utc().format('YYYY-MM-DD HH:mm:ss');
 
     const result = await pool.query(
       `INSERT INTO job_applications (
@@ -169,7 +175,7 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
         company_name,
         job_title,
         application_status,
-        date_applied,
+        dateInUTC, // Use the converted UTC date here
         job_description,
         notes,
         application_method,
@@ -206,10 +212,9 @@ app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res
 });
 
 
-// Update a job application by ID
+// PUT endpoint for updating a job application
 app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
   try {
-    const { id } = req.params;
     const {
       company_name,
       job_title,
@@ -226,14 +231,18 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
       location,
       experience_level,
       pinned,
+      userTimezone,
     } = req.body;
 
+    // Convert the local date to UTC
+    const dateInUTC = moment.tz(date_applied, userTimezone).utc().format('YYYY-MM-DD HH:mm:ss');
+
     const result = await pool.query(
-      `UPDATE job_applications 
+      `UPDATE job_applications
       SET company_name = $1,
         job_title = $2,
         application_status = $3,
-        date_applied = $4,
+        date_applied = $4, // Use the converted UTC date here
         job_description = $5,
         notes = $6,
         application_method = $7,
@@ -252,7 +261,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
         company_name,
         job_title,
         application_status,
-        date_applied,
+        dateInUTC, // Use the converted UTC date here
         job_description,
         notes,
         application_method,
@@ -264,7 +273,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
         location,
         experience_level,
         pinned,
-        id,
+        req.params.id,
         req.accountId,
       ]
     );
@@ -280,6 +289,7 @@ app.put('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 // Delete a job application by ID
 app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
