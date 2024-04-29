@@ -14,9 +14,14 @@ const Navbar = () => {
     navigate('/');
   };
 
+  const handleDashboardNavButtonClicked = () => {
+    //  Route dashboard nav button to the dashboard page reloads data
+    navigate('/dashboard');
+  }
+
   return (
     <nav className="navbar">
-      <NavbarButton text="Dashboard" className="dashboard" />
+      <NavbarButton text="Dashboard" className="dashboard"  onClick={handleDashboardNavButtonClicked} />
       <NavbarButton text="Settings" className="settings" />
       <div className="navbar-spacer"></div>
       <NavbarButton text="Logout" className="logout" onClick={handleLogout} />
