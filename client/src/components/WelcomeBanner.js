@@ -49,7 +49,7 @@ const WelcomeBanner = ({ name }) => {
         Welcome back, {name.firstName} {name.lastName}!
       </div>
       <div className="daily-goal">
-        {applicationsLeft}/{dailyGoal} applications tracked!
+        {applicationsLeft} applications left today!
       </div>
     </div>
   );
