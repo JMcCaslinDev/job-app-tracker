@@ -1,7 +1,9 @@
 .job-application-actions {
     display: flex;
     align-items: center;
-    gap: 20px; /* Adjust the space between the elements */
+    gap: 15px;
+    padding: 20px;
+    background-color: #39373d; /* Slightly different background for section differentiation */
   }
   
   .url-input-section {
@@ -12,7 +14,11 @@
   
   .url-input {
     width: 400px; 
-    padding: 8px 12px; /* Add some padding inside the input */
+    flex-grow: 1;
+    padding: 10px;
+    border: 1px solid #444;
+    background-color: #2d2d30; /* Matching the dashboard theme */
+    color: #ffffff;
   }
   
   button {
@@ -24,5 +30,9 @@
   /* Additional styles to make the buttons look more distinct */
   button:hover {
     background-color: #f2f2f2; /* Light grey background on hover */
+  }
+  
+  .url-input::placeholder {
+    color: #a8a8a8; /* Lighter text for placeholder */
   }
   

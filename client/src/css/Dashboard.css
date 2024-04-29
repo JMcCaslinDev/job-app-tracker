@@ -28,26 +28,6 @@
   margin-bottom: 10px; /* Space between welcome banner and action section */
 }
 
-.job-application-actions {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 20px;
-  background-color: #39373d; /* Slightly different background for section differentiation */
-}
-
-.url-input {
-  flex-grow: 1;
-  padding: 10px;
-  border: 1px solid #444;
-  background-color: #2d2d30; /* Matching the dashboard theme */
-  color: #ffffff;
-}
-
-.url-input::placeholder {
-  color: #a8a8a8; /* Lighter text for placeholder */
-}
-
 .button {
   padding: 10px 20px;
   background-color: #5c5876; /* Muted purple for buttons */
