@@ -1,5 +1,6 @@
 // components/JobApplicationActions.js
 import React from 'react';
+import '../css/JobApplicationActions.css';
 
 const JobApplicationActions = ({ openModal }) => {
   const handleAutoAdd = () => {

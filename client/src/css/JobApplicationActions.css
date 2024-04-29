@@ -1,0 +1,28 @@
+.job-application-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Adjust the space between the elements */
+  }
+  
+  .url-input-section {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between the URL input and the Auto Add button */
+  }
+  
+  .url-input {
+    width: 150%; /* Make the URL input 1.5 times wider */
+    padding: 8px 12px; /* Add some padding inside the input */
+  }
+  
+  button {
+    padding: 10px 15px; /* Padding inside the buttons */
+    cursor: pointer;
+    /* Add additional styles for your buttons here */
+  }
+  
+  /* Additional styles to make the buttons look more distinct */
+  button:hover {
+    background-color: #f2f2f2; /* Light grey background on hover */
+  }
+  
