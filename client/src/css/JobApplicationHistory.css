@@ -12,11 +12,10 @@
   .table-header {
     display: flex;
     justify-content: space-between;
-    background-color: #fff; /* Remove the background color */
     font-weight: bold;
     padding: 10px 0; /* Adjust padding to remove vertical space */
-    color: #333;
-    border-bottom: 2px solid #f2f2f2; /* Add a bottom border */
+   
+   
   }
   
   .header-item {
