@@ -20,7 +20,7 @@ const initialFormData = {
   pinned: false,
 };
 
-const AddJobApplicationModal = ({ isOpen, onClose }) => {
+const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess }) => {
   const [formData, setFormData] = useState(initialFormData);
 
   useEffect(() => {
@@ -39,11 +39,16 @@ const AddJobApplicationModal = ({ isOpen, onClose }) => {
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      await axios.post('/api/job-applications', formData, {
+      const response = await axios.post('/api/job-applications', formData, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setFormData(initialFormData);
-      onClose();
+
+      // If the request is successful, reset the form data, close the modal and trigger the refresh.
+      if (response.status === 201) {
+        setFormData(initialFormData);
+        onClose();
+        onAddSuccess(); // Trigger refresh after successful addition
+      }
     } catch (error) {
       console.error('Error creating job application:', error);
     }

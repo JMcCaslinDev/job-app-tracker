@@ -51,6 +51,14 @@ const Dashboard = () => {
     }
   }, []);
 
+  // Refreshes the dashboard data from the backend
+  const refreshDashboardData = useCallback(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetchDashboardData(token);
+    }
+  }, [fetchDashboardData]);
+
   const fetchData = useCallback(async () => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -75,7 +83,12 @@ const Dashboard = () => {
   }, [fetchData, location.key]);
 
   const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  
+  // Update closeModal to refresh data after closing the modal
+  const closeModal = () => {
+    setIsModalOpen(false);
+    refreshDashboardData();
+  };
 
   return (
     <div className="dashboard">
@@ -87,7 +100,7 @@ const Dashboard = () => {
         <JobApplicationActions openModal={openModal} />
         <JobApplicationHistory dashboardData={dashboardData} />
       </div>
-      <AddJobApplicationModal isOpen={isModalOpen} onClose={closeModal} />
+      <AddJobApplicationModal isOpen={isModalOpen} onClose={closeModal} onAddSuccess={refreshDashboardData} />
     </div>
   );
 };
