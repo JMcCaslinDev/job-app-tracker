@@ -1,6 +1,6 @@
 /* JobApplicationHistory.css */
 .job-application-history {
-    width: calc(100% - 100px); /* Assuming the navbar is 100px wide */
+    width: 100%;
     padding: 0 20px; /* Keep your existing padding */
     box-sizing: border-box; /* Ensure padding is included in width calculation */
   }
