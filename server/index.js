@@ -337,23 +337,30 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     }
 
     // Calculate the start and end of the user's current day in their timezone
-    const startOfDay = moment.tz(userTimezone).startOf('day').format('YYYY-MM-DD HH:mm:ss');
-    const endOfDay = moment.tz(userTimezone).endOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const startOfDayLocal = moment.tz(userTimezone).startOf('day').format('YYYY-MM-DD HH:mm:ss');
+    const endOfDayLocal = moment.tz(userTimezone).endOf('day').format('YYYY-MM-DD HH:mm:ss');
 
     console.log(`User timezone: ${userTimezone}`);
-    console.log(`Start of day in local timezone: ${startOfDay}`);
-    console.log(`End of day in local timezone: ${endOfDay}`);
+    console.log(`Start of day in local timezone: ${startOfDayLocal}`);
+    console.log(`End of day in local timezone: ${endOfDayLocal}`);
+
+    // Convert local start and end of day to UTC to match against the stored times in UTC
+    const startOfDayUTC = moment.tz(startOfDayLocal, userTimezone).utc().format('YYYY-MM-DD HH:mm:ss');
+    const endOfDayUTC = moment.tz(endOfDayLocal, userTimezone).utc().format('YYYY-MM-DD HH:mm:ss');
+
+    console.log(`Start of day in UTC: ${startOfDayUTC}`);
+    console.log(`End of day in UTC: ${endOfDayUTC}`);
 
     const result = await pool.query(`
       SELECT 
         COALESCE(a.daily_application_goal - COUNT(j.index), a.daily_application_goal) AS applications_left
       FROM accounts a
       LEFT JOIN job_applications j ON a.account_id = j.account_id 
-        AND j.date_applied >= $1 AT TIME ZONE 'UTC' 
-        AND j.date_applied <= $2 AT TIME ZONE 'UTC' 
+        AND j.date_applied >= $1 
+        AND j.date_applied < $2 
       WHERE a.account_id = $3
       GROUP BY a.daily_application_goal, a.account_id
-    `, [startOfDay, endOfDay, accountId]);
+    `, [startOfDayUTC, endOfDayUTC, accountId]);
 
     console.log('Query result:', result.rows);
 
@@ -369,6 +376,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
