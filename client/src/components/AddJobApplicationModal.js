@@ -20,16 +20,16 @@ const initialFormData = {
   pinned: false,
 };
 
-const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData, onDelete }) => {
-  const [formData, setFormData] = useState(initialFormData || initialFormData);
+const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData: initialData, onDelete }) => {
+  const [formData, setFormData] = useState(initialData || initialFormData);
 
   useEffect(() => {
-    if (isOpen && initialFormData) {
-      setFormData(initialFormData);
+    if (isOpen && initialData) {
+      setFormData(initialData);
     } else {
       setFormData(initialFormData);
     }
-  }, [isOpen, initialFormData]);
+  }, [isOpen, initialData]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,8 +42,8 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
     try {
       const token = localStorage.getItem('token');
       let response;
-      if (initialFormData) {
-        response = await axios.put(`/api/job-applications/${initialFormData.index}`, formData, {
+      if (initialData) {
+        response = await axios.put(`/api/job-applications/${initialData.index}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
@@ -53,7 +53,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
       }
 
       if (response.status === 200 || response.status === 201) {
-        setFormData(initialFormData || initialFormData);
+        setFormData(initialData || initialFormData);
         onClose();
         onAddSuccess();
       }
@@ -67,7 +67,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <h2>{initialFormData ? 'Edit' : 'Add'} Job Application</h2>
+        <h2>{initialData ? 'Edit' : 'Add'} Job Application</h2>
         <form onSubmit={handleSubmit}>
           <label>
             Company Name:
@@ -130,7 +130,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
             <input type="checkbox" name="pinned" checked={formData.pinned || false} onChange={handleChange} />
           </label>
           <button type="submit">Save</button>
-          {initialFormData && (
+          {initialData && (
             <button type="button" onClick={onDelete}>Delete</button>
           )}
         </form>
