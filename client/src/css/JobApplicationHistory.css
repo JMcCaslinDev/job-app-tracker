@@ -16,7 +16,7 @@
 }
 
 .header-item {
-    flex-grow: 1;
+    flex: 1;
     text-align: center;
     padding: 0 10px;
 }
