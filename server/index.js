@@ -332,29 +332,43 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     const userTimezone = req.headers['x-user-timezone'];
 
     if (!userTimezone) {
+      console.error('User timezone header is missing');
       return res.status(400).json({ error: 'User timezone not provided' });
     }
 
+    // For debugging: log the timezone and current date at timezone
+    const currentDateAtTimezone = new Date().toLocaleString("en-US", { timeZone: userTimezone });
+    console.log(`User timezone: ${userTimezone}`);
+    console.log(`Current date at user timezone: ${currentDateAtTimezone}`);
+
     const result = await pool.query(`
       SELECT 
-        COALESCE(a.daily_application_goal - COUNT(ja.index), a.daily_application_goal) AS applications_left
+        COALESCE(a.daily_application_goal - COUNT(ja.application_id), a.daily_application_goal) AS applications_left
       FROM accounts a
       LEFT JOIN job_applications ja ON a.account_id = ja.account_id 
         AND ja.date_applied >= CURRENT_DATE AT TIME ZONE $1
         AND ja.date_applied < CURRENT_DATE AT TIME ZONE $1 + INTERVAL '1 day'
       WHERE a.account_id = $2
-      GROUP BY a.daily_application_goal
+      GROUP BY a.daily_application_goal, a.account_id
     `, [userTimezone, accountId]);
 
+    // For debugging: log the query result
     console.log('Query result:', result.rows);
 
-    const applicationsLeft = result.rows[0].applications_left;
-    res.json({ applicationsLeft });
+    // Make sure we actually got a result back
+    if (result.rows.length > 0) {
+      const applicationsLeft = result.rows[0].applications_left;
+      res.json({ applicationsLeft });
+    } else {
+      console.error('No result returned from query');
+      res.status(404).json({ error: 'Daily application goal not set for user' });
+    }
   } catch (error) {
-    console.error('Error retrieving applications left:', error);
+    console.error('Error retrieving applications left:', error.stack);
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 // ALL API Routes Above Here
