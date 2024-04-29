@@ -1,25 +1,22 @@
 /* JobApplicationHistory.css */
 .job-application-history {
     width: 100%;
-    padding: 0 20px; /* Keep your existing padding */
-    box-sizing: border-box; /* Ensure padding is included in width calculation */
-  }
-  
-  .history-section {
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.history-section {
     display: flex;
     flex-direction: column;
-  }
-  
-  .table-header {
+}
+
+.table-header {
     display: flex;
-    justify-content: space-between;
-    font-weight: bold;
     padding: 10px 0;
-  }
-  
-  .header-item {
+}
+
+.header-item {
     flex-grow: 1;
-    text-align: left;
+    text-align: center;
     padding: 0 10px;
-    box-sizing: border-box;
-  }
+}
