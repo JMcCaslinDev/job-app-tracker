@@ -1,7 +1,7 @@
 .job-application-actions {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 20px;
     padding: 20px;
     background-color: #39373d; /* Slightly different background for section differentiation */
   }
