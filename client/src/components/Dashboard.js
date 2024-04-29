@@ -103,7 +103,7 @@ const Dashboard = () => {
     if (window.confirm('Are you sure you want to delete this job application?')) {
       try {
         const token = localStorage.getItem('token');
-        await axios.delete(`/api/job-applications/${selectedApplication.id}`, {
+        await axios.delete(`/api/job-applications/${selectedApplication.index}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         closeEditModal();
@@ -128,13 +128,15 @@ const Dashboard = () => {
         onClose={closeModal}
         onAddSuccess={refreshDashboardData}
       />
-      <AddJobApplicationModal
-        isOpen={isEditModalOpen}
-        onClose={closeEditModal}
-        onAddSuccess={refreshDashboardData}
-        initialFormData={selectedApplication}
-        onDelete={handleDelete}
-      />
+      {selectedApplication && (
+        <AddJobApplicationModal
+          isOpen={isEditModalOpen}
+          onClose={closeEditModal}
+          onAddSuccess={refreshDashboardData}
+          initialFormData={selectedApplication}
+          onDelete={handleDelete}
+        />
+      )}
     </div>
   );
 };

@@ -43,7 +43,7 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
       const token = localStorage.getItem('token');
       let response;
       if (initialFormData) {
-        response = await axios.put(`/api/job-applications/${initialFormData.id}`, formData, {
+        response = await axios.put(`/api/job-applications/${initialFormData.index}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
@@ -71,63 +71,63 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
         <form onSubmit={handleSubmit}>
           <label>
             Company Name:
-            <input type="text" name="company_name" value={formData.company_name} onChange={handleChange} />
+            <input type="text" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
           </label>
           <label>
             Job Title:
-            <input type="text" name="job_title" value={formData.job_title} onChange={handleChange} />
+            <input type="text" name="job_title" value={formData.job_title || ''} onChange={handleChange} />
           </label>
           <label>
             Application Status:
-            <input type="text" name="application_status" value={formData.application_status} onChange={handleChange} />
+            <input type="text" name="application_status" value={formData.application_status || ''} onChange={handleChange} />
           </label>
           <label>
             Date Applied:
-            <input type="date" name="date_applied" value={formData.date_applied} onChange={handleChange} />
+            <input type="date" name="date_applied" value={formData.date_applied || ''} onChange={handleChange} />
           </label>
           <label>
             Job Description:
-            <textarea name="job_description" value={formData.job_description} onChange={handleChange}></textarea>
+            <textarea name="job_description" value={formData.job_description || ''} onChange={handleChange}></textarea>
           </label>
           <label>
             Notes:
-            <textarea name="notes" value={formData.notes} onChange={handleChange}></textarea>
+            <textarea name="notes" value={formData.notes || ''} onChange={handleChange}></textarea>
           </label>
           <label>
             Application Method:
-            <input type="text" name="application_method" value={formData.application_method} onChange={handleChange} />
+            <input type="text" name="application_method" value={formData.application_method || ''} onChange={handleChange} />
           </label>
           <label>
             Pay Amount:
-            <input type="number" name="pay_amount" value={formData.pay_amount} onChange={handleChange} />
+            <input type="number" name="pay_amount" value={formData.pay_amount || 0} onChange={handleChange} />
           </label>
           <label>
             Job Posting URL:
-            <input type="text" name="job_posting_url" value={formData.job_posting_url} onChange={handleChange} />
+            <input type="text" name="job_posting_url" value={formData.job_posting_url || ''} onChange={handleChange} />
           </label>
           <label>
             Pay Type:
-            <input type="text" name="pay_type" value={formData.pay_type} onChange={handleChange} />
+            <input type="text" name="pay_type" value={formData.pay_type || ''} onChange={handleChange} />
           </label>
           <label>
             Employment Type:
-            <input type="text" name="employment_type" value={formData.employment_type} onChange={handleChange} />
+            <input type="text" name="employment_type" value={formData.employment_type || ''} onChange={handleChange} />
           </label>
           <label>
             Work Location Mode:
-            <input type="text" name="work_location_mode" value={formData.work_location_mode} onChange={handleChange} />
+            <input type="text" name="work_location_mode" value={formData.work_location_mode || ''} onChange={handleChange} />
           </label>
           <label>
             Location:
-            <input type="text" name="location" value={formData.location} onChange={handleChange} />
+            <input type="text" name="location" value={formData.location || ''} onChange={handleChange} />
           </label>
           <label>
             Experience Level:
-            <input type="text" name="experience_level" value={formData.experience_level} onChange={handleChange} />
+            <input type="text" name="experience_level" value={formData.experience_level || ''} onChange={handleChange} />
           </label>
           <label>
             Pinned:
-            <input type="checkbox" name="pinned" checked={formData.pinned} onChange={handleChange} />
+            <input type="checkbox" name="pinned" checked={formData.pinned || false} onChange={handleChange} />
           </label>
           <button type="submit">Save</button>
           {initialFormData && (
