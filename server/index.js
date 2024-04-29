@@ -336,26 +336,26 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
       return res.status(400).json({ error: 'User timezone not provided' });
     }
 
-    // For debugging: log the timezone and current date at timezone
-    const currentDateAtTimezone = new Date().toLocaleString("en-US", { timeZone: userTimezone });
-    console.log(`User timezone: ${userTimezone}`);
-    console.log(`Current date at user timezone: ${currentDateAtTimezone}`);
+    // Calculate the start and end of the user's current day in their timezone
+    const startOfDay = moment.tz(userTimezone).startOf('day').utc().format();
+    const endOfDay = moment.tz(userTimezone).endOf('day').utc().format();
+
+    console.log(`Start of day in UTC: ${startOfDay}`);
+    console.log(`End of day in UTC: ${endOfDay}`);
 
     const result = await pool.query(`
       SELECT 
         COALESCE(a.daily_application_goal - COUNT(ja.application_id), a.daily_application_goal) AS applications_left
       FROM accounts a
       LEFT JOIN job_applications ja ON a.account_id = ja.account_id 
-        AND ja.date_applied >= CURRENT_DATE AT TIME ZONE $1
-        AND ja.date_applied < CURRENT_DATE AT TIME ZONE $1 + INTERVAL '1 day'
-      WHERE a.account_id = $2
+        AND ja.date_applied >= $1
+        AND ja.date_applied <= $2
+      WHERE a.account_id = $3
       GROUP BY a.daily_application_goal, a.account_id
-    `, [userTimezone, accountId]);
+    `, [startOfDay, endOfDay, accountId]);
 
-    // For debugging: log the query result
     console.log('Query result:', result.rows);
 
-    // Make sure we actually got a result back
     if (result.rows.length > 0) {
       const applicationsLeft = result.rows[0].applications_left;
       res.json({ applicationsLeft });
@@ -368,6 +368,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
 
 
 
