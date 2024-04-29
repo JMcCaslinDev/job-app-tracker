@@ -1,3 +1,4 @@
+// Dashboard.js
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
@@ -6,6 +7,7 @@ import Navbar from './Navbar';
 import JobApplicationActions from './JobApplicationActions';
 import JobApplicationHistory from './JobApplicationHistory';
 import AddJobApplicationModal from './AddJobApplicationModal';
+import WelcomeBanner from './WelcomeBanner';
 import '../css/Dashboard.css';
 
 const Dashboard = () => {
@@ -117,9 +119,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <Navbar />
       <div className="dashboard-main">
-        <div className="welcome-banner">
-          Welcome back, {name.firstName} {name.lastName}!
-        </div>
+        <WelcomeBanner name={name} />
         <JobApplicationActions openModal={openModal} />
         <JobApplicationHistory dashboardData={dashboardData} onEdit={openEditModal} />
       </div>

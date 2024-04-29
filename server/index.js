@@ -302,6 +302,41 @@ app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
 });
 
 
+// Endpoint to get user's daily application goal
+app.get('/api/user/daily-goal', verifyJwtToken, async (req, res) => {
+  try {
+    const { accountId } = req;
+    const result = await pool.query('SELECT daily_application_goal FROM accounts WHERE account_id = $1', [accountId]);
+    const dailyGoal = result.rows[0].daily_application_goal;
+    res.json({ dailyGoal });
+  } catch (error) {
+    console.error('Error retrieving daily goal:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Endpoint to get the number of applications left for today
+app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
+  try {
+    const { accountId } = req;
+    const today = new Date().toISOString().split('T')[0];
+    const result = await pool.query(`
+      SELECT 
+        COALESCE(a.daily_application_goal - COUNT(ja.index), a.daily_application_goal) AS applications_left
+      FROM accounts a
+      LEFT JOIN job_applications ja ON a.account_id = ja.account_id AND ja.date_applied = $1
+      WHERE a.account_id = $2
+      GROUP BY a.daily_application_goal
+    `, [today, accountId]);
+    const applicationsLeft = result.rows[0].applications_left;
+    res.json({ applicationsLeft });
+  } catch (error) {
+    console.error('Error retrieving applications left:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+
 // ALL API Routes Above Here
 
 
