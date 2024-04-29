@@ -16,6 +16,7 @@ const Dashboard = () => {
   const location = useLocation();
 
   const fetchName = useCallback(async (token) => {
+    console.log("\nEntered fetchName\n");
     try {
       const nameResponse = await axios.get('/api/user/name', {
         headers: { Authorization: `Bearer ${token}` },
@@ -34,6 +35,7 @@ const Dashboard = () => {
   }, []);
 
   const fetchDashboardData = useCallback(async (token) => {
+    console.log("\nEntered fetchDashBoardData\n");
     try {
       const dashboardResponse = await axios.get('/api/user/return-all/job-applications', {
         headers: { Authorization: `Bearer ${token}` },
