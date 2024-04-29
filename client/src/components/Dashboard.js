@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import Navbar from './Navbar';
@@ -14,7 +14,6 @@ const Dashboard = () => {
   const [dashboardData, setDashboardData] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
-  const location = useLocation();
 
   console.log("\n1\n");
 
@@ -78,7 +77,7 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, [location]);
+  }, [navigate]);
 
   console.log("\n8\n");
 
