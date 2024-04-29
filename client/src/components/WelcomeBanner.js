@@ -21,16 +21,21 @@ const WelcomeBanner = ({ name }) => {
     };
 
     const fetchApplicationsLeft = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await axios.get('/api/user/applications-left', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setApplicationsLeft(response.data.applicationsLeft);
-      } catch (error) {
-        console.error('Error fetching applications left:', error);
-      }
-    };
+        try {
+          const token = localStorage.getItem('token');
+          const userTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          const response = await axios.get('/api/user/applications-left', {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              'X-User-Timezone': userTimezone,
+            },
+          });
+          console.log('Applications left response:', response.data);
+          setApplicationsLeft(response.data.applicationsLeft);
+        } catch (error) {
+          console.error('Error fetching applications left:', error);
+        }
+      };
 
     fetchDailyGoal();
     fetchApplicationsLeft();

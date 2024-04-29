@@ -319,15 +319,25 @@ app.get('/api/user/daily-goal', verifyJwtToken, async (req, res) => {
 app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
   try {
     const { accountId } = req;
-    const today = new Date().toISOString().split('T')[0];
+    const userTimezone = req.headers['x-user-timezone'];
+
+    if (!userTimezone) {
+      return res.status(400).json({ error: 'User timezone not provided' });
+    }
+
     const result = await pool.query(`
       SELECT 
         COALESCE(a.daily_application_goal - COUNT(ja.index), a.daily_application_goal) AS applications_left
       FROM accounts a
-      LEFT JOIN job_applications ja ON a.account_id = ja.account_id AND ja.date_applied = $1
+      LEFT JOIN job_applications ja ON a.account_id = ja.account_id 
+        AND ja.date_applied >= CURRENT_DATE AT TIME ZONE $1
+        AND ja.date_applied < CURRENT_DATE AT TIME ZONE $1 + INTERVAL '1 day'
       WHERE a.account_id = $2
       GROUP BY a.daily_application_goal
-    `, [today, accountId]);
+    `, [userTimezone, accountId]);
+
+    console.log('Query result:', result.rows);
+
     const applicationsLeft = result.rows[0].applications_left;
     res.json({ applicationsLeft });
   } catch (error) {
