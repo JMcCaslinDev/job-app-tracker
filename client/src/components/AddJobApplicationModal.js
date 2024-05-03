@@ -1,23 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../css/AddJobApplicationModal.css';
-import moment from 'moment-timezone'; // Ensure you import moment-timezone
+import moment from 'moment-timezone';
 
 const initialFormData = {
   company_name: '',
   job_title: '',
-  application_status: '',
+  application_status: 'Applied', // Default value set
   date_applied: '',
   job_description: '',
   notes: '',
-  application_method: '',
+  application_method: 'LinkedIn', // Default value set
   pay_amount: 0,
+  pay_amount_max: 0, // New field with default value
   job_posting_url: '',
   pay_type: '',
-  employment_type: '',
-  work_location_mode: '',
+  employment_type: 'Full-time', // Default value set
+  work_location_mode: 'Remote', // Default value set
   location: '',
-  experience_level: '',
+  experience_level: 'Entry Level', // Default value set
   pinned: false,
 };
 
@@ -26,7 +27,6 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
 
   useEffect(() => {
     if (isOpen && initialData) {
-      // When editing, convert the UTC date back to local time
       const localTime = moment.utc(initialData.date_applied).local().format('YYYY-MM-DD');
       setFormData({ ...initialData, date_applied: localTime });
     } else {
@@ -44,19 +44,14 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
     e.preventDefault();
     try {
       const token = localStorage.getItem('token');
-      const userTimezone = moment.tz.guess(); // Guess the user's timezone or obtain it from the browser
-      
-      // Append 'T00:00:00' to ensure the time part is at midnight
+      const userTimezone = moment.tz.guess();
       const datetimeApplied = `${formData.date_applied}T00:00:00`;
-      // When saving, convert local time to UTC
       const datetimeInUTC = moment.tz(datetimeApplied, userTimezone).utc().format();
-
       const payload = {
         ...formData,
-        date_applied: datetimeInUTC, // Use the UTC time for date_applied
+        date_applied: datetimeInUTC,
         userTimezone,
       };
-
       let response;
       if (initialData) {
         response = await axios.put(`/api/job-applications/${initialData.index}`, payload, {
@@ -67,9 +62,8 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
           headers: { Authorization: `Bearer ${token}` },
         });
       }
-
       if (response.status === 200 || response.status === 201) {
-        setFormData(initialFormData); // Reset form data after successful add/edit
+        setFormData(initialFormData);
         onClose();
         onAddSuccess();
       }
@@ -85,65 +79,75 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
         <h2>{initialData ? 'Edit' : 'Add'} Job Application</h2>
         <form onSubmit={handleSubmit}>
-          <label>
-            Job Posting URL:
+          <label>Job Posting URL:
             <input type="text" name="job_posting_url" value={formData.job_posting_url || ''} onChange={handleChange} />
           </label>
-          <label>
-            Job Title:
+          <label>Job Title:
             <input type="text" name="job_title" value={formData.job_title || ''} onChange={handleChange} />
           </label>
-          <label>
-            Company Name:
+          <label>Company Name:
             <input type="text" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
           </label>
-          <label>
-            Pay Amount:
-            <input type="number" name="pay_amount" value={formData.pay_amount || 0} onChange={handleChange} />
+          <label>Pay Amount:
+            <input type="number" name="pay_amount" value={formData.pay_amount || 0} onChange={handleChange} onFocus={(e) => e.target.select()} />
           </label>
-          <label>
-            Pay Type:
+          <label>Pay Amount Max:
+            <input type="number" name="pay_amount_max" value={formData.pay_amount_max || 0} onChange={handleChange} onFocus={(e) => e.target.select()} />
+          </label>
+          <label>Pay Type:
             <input type="text" name="pay_type" value={formData.pay_type || ''} onChange={handleChange} />
           </label>
-          <label>
-            Job Description:
+          <label>Job Description:
             <textarea name="job_description" value={formData.job_description || ''} onChange={handleChange}></textarea>
           </label>
-          <label>
-            Notes:
+          <label>Notes:
             <textarea name="notes" value={formData.notes || ''} onChange={handleChange}></textarea>
           </label>
-          <label>
-            Application Method:
-            <input type="text" name="application_method" value={formData.application_method || ''} onChange={handleChange} />
+          <label>Application Method:
+            <select name="application_method" value={formData.application_method} onChange={handleChange}>
+              <option value="LinkedIn">LinkedIn</option>
+              <option value="Indeed">Indeed</option>
+            </select>
           </label>
-          
-          <label>
-            Employment Type:
-            <input type="text" name="employment_type" value={formData.employment_type || ''} onChange={handleChange} />
+          <label>Employment Type:
+            <select name="employment_type" value={formData.employment_type} onChange={handleChange}>
+              <option value="Full-time">Full-time</option>
+              <option value="Part-time">Part-time</option>
+              <option value="Contract">Contract</option>
+              <option value="Temporary">Temporary</option>
+              <option value="Internship">Internship</option>
+            </select>
           </label>
-          <label>
-            Work Location Mode:
-            <input type="text" name="work_location_mode" value={formData.work_location_mode || ''} onChange={handleChange} />
+          <label>Work Location Mode:
+            <select name="work_location_mode" value={formData.work_location_mode} onChange={handleChange}>
+              <option value="Remote">Remote</option>
+              <option value="On-site">On-site</option>
+              <option value="Hybrid">Hybrid</option>
+            </select>
           </label>
-          <label>
-            Location:
+          <label>Location:
             <input type="text" name="location" value={formData.location || ''} onChange={handleChange} />
           </label>
-          <label>
-            Experience Level:
-            <input type="text" name="experience_level" value={formData.experience_level || ''} onChange={handleChange} />
+          <label>Experience Level:
+            <select name="experience_level" value={formData.experience_level} onChange={handleChange}>
+              <option value="Entry Level">Entry Level</option>
+              <option value="Mid Level">Mid Level</option>
+              <option value="Senior Level">Senior Level</option>
+              <option value="No Experience Required">No Experience Required</option>
+            </select>
           </label>
-          <label>
-            Application Status:
-            <input type="text" name="application_status" value={formData.application_status || ''} onChange={handleChange} />
+          <label>Application Status:
+            <select name="application_status" value={formData.application_status} onChange={handleChange}>
+              <option value="Applied">Applied</option>
+              <option value="Interviewing">Interviewing</option>
+              <option value="Offered">Offered</option>
+              <option value="Hired">Hired</option>
+            </select>
           </label>
-          <label>
-            Date Applied:
+          <label>Date Applied:
             <input type="date" name="date_applied" value={formData.date_applied || ''} onChange={handleChange} />
           </label>
-          <label>
-            Pinned:
+          <label>Pinned:
             <input type="checkbox" name="pinned" checked={formData.pinned || false} onChange={handleChange} />
           </label>
           <button type="submit">Save</button>
