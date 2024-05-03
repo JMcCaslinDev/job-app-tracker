@@ -22,8 +22,12 @@
   "scripts": {
     "start": "npm run build:css && react-scripts start",
     "build": "npm run build:css && react-scripts build",
-    "build:css": "npx postcss src/index.css -o src/output.css"
+    "build:css": "npx postcss-cli src/index.css -o src/output.css"
+    
   },  
+  "devDependencies": {
+    "postcss-cli": "^9.0.1"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
