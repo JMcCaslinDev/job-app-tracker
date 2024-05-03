@@ -98,20 +98,20 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
             <input type="text" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
           </label>
           <label>
-            Job Description:
-            <textarea name="job_description" value={formData.job_description || ''} onChange={handleChange}></textarea>
-          </label>
-          <label>
-            Notes:
-            <textarea name="notes" value={formData.notes || ''} onChange={handleChange}></textarea>
-          </label>
-          <label>
             Pay Amount:
             <input type="number" name="pay_amount" value={formData.pay_amount || 0} onChange={handleChange} />
           </label>
           <label>
             Pay Type:
             <input type="text" name="pay_type" value={formData.pay_type || ''} onChange={handleChange} />
+          </label>
+          <label>
+            Job Description:
+            <textarea name="job_description" value={formData.job_description || ''} onChange={handleChange}></textarea>
+          </label>
+          <label>
+            Notes:
+            <textarea name="notes" value={formData.notes || ''} onChange={handleChange}></textarea>
           </label>
           <label>
             Application Method:
