@@ -58,16 +58,15 @@ const LandingPage = () => {
         </ul>
       </section>
 
-      {/* Pricing Section */}
       <section className="pricing-section">
         <h2>Pricing</h2>
-        <p>Choose a plan that suits your needs:</p>
+        <p>Get full access to our Job Application Tracker with a one-time purchase:</p>
         <ul className="pricing-list">
-          <li>Basic Plan: $9.99/month</li>
-          <li>Pro Plan: $19.99/month</li>
-          <li>Premium Plan: $29.99/month</li>
+          <li>Single Purchase: $29</li>
         </ul>
+        <p>Speed up your job search with powerful tools for organizing and tracking applications. Enter your job applications manually or simply paste a URL to auto-fill details!</p>
       </section>
+
 
       {/* Footer */}
       <footer className="footer">
