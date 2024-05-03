@@ -2,15 +2,22 @@
     "name": "job-app-tracker",
     "version": "1.0.0",
     "scripts": {
-      "start": "node server/index.js",
-      "install-client": "cd client && npm install",
-      "build-client": "cd client && npm run build",
-      "install-server": "cd server && npm install",
-      "heroku-postbuild": "npm run install-client && npm run build-client && npm run install-server"
+        "start": "node server/index.js",
+        "install-client": "cd client && npm install",
+        "build-client": "cd client && npm run build",
+        "install-server": "cd server && npm install",
+        "heroku-postbuild": "npm run install-client && npm run build-client && npm run install-server"
     },
     "engines": {
-      "node": "18.17.0",
-      "npm": "10.5.2"
+        "node": "18.17.0",
+        "npm": "10.5.2"
+    },
+    "devDependencies": {
+        "autoprefixer": "^10.4.19",
+        "postcss": "^8.4.38",
+        "tailwindcss": "^3.4.3"
+    },
+    "dependencies": {
+        "daisyui": "^4.10.5"
     }
-  }
-  
+}
