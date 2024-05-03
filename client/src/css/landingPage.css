@@ -1,79 +1,29 @@
 .landing-page {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 40px;
-  }
-  
-  .header h1 {
-    font-size: 32px;
-    margin: 0;
-  }
-  
-  .header-buttons {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .hero-section {
-    margin-bottom: 60px;
-  }
-  
-  .hero-section h2 {
-    font-size: 36px;
-    margin-bottom: 20px;
-  }
-  
-  .issues-section,
-  .solution-section,
-  .features-section,
-  .pricing-section {
-    margin-bottom: 60px;
-  }
-  
-  .issues-section h2,
-  .solution-section h2,
-  .features-section h2,
-  .pricing-section h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-  }
-  
-  .issue-cards {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 40px;
-  }
-  
-  .issue-card {
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    width: 300px;
-  }
-  
-  .features-list,
-  .pricing-list {
-    list-style-type: none;
-    padding: 0;
-    margin-top: 20px;
-  }
-  
-  .features-list li,
-  .pricing-list li {
-    margin-bottom: 10px;
-  }
-  
-  .footer {
-    padding: 20px 0;
-    background-color: #f4f4f4;
-  }
+  @apply min-h-screen;
+}
+
+.header {
+  @apply z-10 relative;
+}
+
+.hero-section {
+  @apply relative overflow-hidden;
+}
+
+.hero-section::before {
+  content: '';
+  @apply hidden md:block absolute inset-0 z-0;
+  background: radial-gradient(circle at center, rgba(255, 255, 255, 0.13) 0%, rgba(6, 171, 120, 0.13) 100%);
+}
+
+.features-section {
+  @apply bg-base-100;
+}
+
+.pricing-section {
+  @apply bg-base-200;
+}
+
+.footer {
+  @apply bg-base-300/50 border-t border-base-content/10;
+}
