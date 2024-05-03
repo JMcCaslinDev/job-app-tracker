@@ -86,20 +86,16 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
         <h2>{initialData ? 'Edit' : 'Add'} Job Application</h2>
         <form onSubmit={handleSubmit}>
           <label>
-            Company Name:
-            <input type="text" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
+            Job Posting URL:
+            <input type="text" name="job_posting_url" value={formData.job_posting_url || ''} onChange={handleChange} />
           </label>
           <label>
             Job Title:
             <input type="text" name="job_title" value={formData.job_title || ''} onChange={handleChange} />
           </label>
           <label>
-            Application Status:
-            <input type="text" name="application_status" value={formData.application_status || ''} onChange={handleChange} />
-          </label>
-          <label>
-            Date Applied:
-            <input type="date" name="date_applied" value={formData.date_applied || ''} onChange={handleChange} />
+            Company Name:
+            <input type="text" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
           </label>
           <label>
             Job Description:
@@ -110,21 +106,18 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
             <textarea name="notes" value={formData.notes || ''} onChange={handleChange}></textarea>
           </label>
           <label>
-            Application Method:
-            <input type="text" name="application_method" value={formData.application_method || ''} onChange={handleChange} />
-          </label>
-          <label>
             Pay Amount:
             <input type="number" name="pay_amount" value={formData.pay_amount || 0} onChange={handleChange} />
-          </label>
-          <label>
-            Job Posting URL:
-            <input type="text" name="job_posting_url" value={formData.job_posting_url || ''} onChange={handleChange} />
           </label>
           <label>
             Pay Type:
             <input type="text" name="pay_type" value={formData.pay_type || ''} onChange={handleChange} />
           </label>
+          <label>
+            Application Method:
+            <input type="text" name="application_method" value={formData.application_method || ''} onChange={handleChange} />
+          </label>
+          
           <label>
             Employment Type:
             <input type="text" name="employment_type" value={formData.employment_type || ''} onChange={handleChange} />
@@ -140,6 +133,14 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
           <label>
             Experience Level:
             <input type="text" name="experience_level" value={formData.experience_level || ''} onChange={handleChange} />
+          </label>
+          <label>
+            Application Status:
+            <input type="text" name="application_status" value={formData.application_status || ''} onChange={handleChange} />
+          </label>
+          <label>
+            Date Applied:
+            <input type="date" name="date_applied" value={formData.date_applied || ''} onChange={handleChange} />
           </label>
           <label>
             Pinned:
