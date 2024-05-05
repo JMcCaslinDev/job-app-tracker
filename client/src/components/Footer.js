@@ -2,12 +2,12 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="bg-base-300/50 border-t border-base-content/10">
+    <footer className="bg-base-100 border-t border-base-content/10">
       <div className="max-w-7xl mx-auto px-8 py-24">
         <div className="flex lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
           <div className="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
             <a href="/" className="flex gap-2 justify-center md:justify-start items-center">
-              <img src="/logo.png" alt="JobTrackr Logo" className="w-6 h-6" />
+              <img src="/logo.svg" alt="JobTrackr Logo" className="w-6 h-6" />
               <strong className="font-extrabold tracking-tight text-base md:text-lg">JobTrackr</strong>
             </a>
             <p className="mt-3 text-sm text-base-content/80">
