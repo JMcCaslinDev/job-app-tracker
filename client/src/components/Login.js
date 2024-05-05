@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import '../css/login.css';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -13,72 +12,79 @@ const Login = () => {
     }
   }, [navigate]);
 
-  //  signUp route button action
-  const handleSignupClick = () => {
-    navigate('/signup');
-  };
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
+  const handleSignupClick = () => {
+    navigate('/signup');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-
       const response = await axios.post('/api/login', {
         username,
         password,
       });
-
       if (response.data.success) {
-        // Login successful, redirect to the dashboard
         localStorage.setItem('token', response.data.token);
-        console.log("\nresponse.data.token: ", response.data.token, "\n");
         navigate('/dashboard');
       } else {
         setError('Invalid username or password');
       }
     } catch (error) {
-      console.error('Error:', error);
-      setError('Invalid username or password');
+      console.error('Login error:', error);
+      setError('Login failed due to server error');
     }
   };
 
   return (
-    <div className="login-container">
-      <h2>Login</h2>
-      {error && <p className="error-message">{error}</p>}
-      <form onSubmit={handleSubmit} className="login-form">
-        <div className="form-group">
-          <label htmlFor="username">Username:</label>
-          <input
-            type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+    <div className="flex items-center justify-center min-h-screen bg-base-200">
+      <div className="card w-96 bg-base-100 shadow-xl">
+        <div className="card-body">
+          <h2 className="card-title justify-center">Login</h2>
+          {error && <div className="alert alert-error shadow-lg">{error}</div>}
+          <form onSubmit={handleSubmit}>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Username</span>
+              </label>
+              <input
+                type="text"
+                id="username"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="Enter your username"
+                className="input input-bordered"
+                required
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Password</span>
+              </label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="input input-bordered"
+                required
+              />
+            </div>
+            <div className="form-control mt-6">
+              <button type="submit" className="btn btn-primary">Login</button>
+            </div>
+          </form>
+          <div className="flex justify-center mt-4">
+            <button onClick={handleSignupClick} className="btn btn-link">
+              Don't have an account? Signup here
+            </button>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="login-button">Login</button>
-      </form>
-
-      <br></br>
-      
-      <button type="button" onClick={handleSignupClick}>
-      Don't have an account? Signup here
-      </button>
-
+      </div>
     </div>
   );
 };

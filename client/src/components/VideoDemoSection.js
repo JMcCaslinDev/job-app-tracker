@@ -1,18 +1,24 @@
 import React from 'react';
 
-const VideoDemoSection = () => {
+const YouTubeSection = () => {
   return (
-    <section className="relative bg-base-100 overflow-hidden">
-      <div className="relative pt-6 md:pt-12 pb-24 md:pb-48 md:px-8">
-        <div className="relative max-w-4xl mx-auto">
-          <div className="md:border md:p-2 md:rounded-2xl bg-base-200/70">
-            <div className="relative w-full aspect-video overflow-hidden sm:rounded-xl">
+    <section className="bg-base-300 py-20">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center">
+          <h2 className="text-3xl font-extrabold text-base-content sm:text-4xl">
+            See JobTrackr in Action
+          </h2>
+          <p className="mt-4 text-xl text-base-content">
+            Watch our video to learn how JobTrackr can simplify your job search.
+          </p>
+        </div>
+        <div className="mt-12 flex justify-center">
+          <div className="relative w-full max-w-4xl">
+            <div className="relative pt-[56.25%]">
               <iframe
-                className="absolute inset-0 w-full h-full"
+                className="absolute top-0 left-0 w-full h-full rounded-lg shadow-lg"
                 src="https://www.youtube.com/embed/VIDEO_ID"
-                title="JobTrackr Demo"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                title="JobTrackr Video"
                 allowFullScreen
               ></iframe>
             </div>
@@ -23,4 +29,4 @@ const VideoDemoSection = () => {
   );
 };
 
-export default VideoDemoSection;
+export default YouTubeSection;

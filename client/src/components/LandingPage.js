@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import ComparisonSection from './ComparisonSection';
 import FeaturesSection from './FeaturesSection';
 import VideoDemoSection from './VideoDemoSection';
+import PricingSection from './PricingSection';
 import FAQSection from './FAQSection';
 import Footer from './Footer';
 
@@ -52,6 +53,9 @@ const LandingPage = () => {
 
       {/* Video Demo Section */}
       <VideoDemoSection />
+
+      {/* Pricing Section */}
+      <PricingSection />
 
       {/* FAQ Section */}
       <FAQSection />

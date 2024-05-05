@@ -2,7 +2,7 @@ import React from 'react';
 
 const FeaturesSection = () => {
   return (
-    <section className="features-section py-24 md:py-32 space-y-24 md:space-y-32 max-w-5xl mx-auto bg-base-100">
+    <section className="features-section py-24 md:py-32 space-y-24 md:space-y-32 max-w-5xl mx-auto bg-base-100" id="features">
       <div className="px-8">
         <h2 className="font-extrabold text-4xl lg:text-5xl tracking-tight mb-12 md:mb-24">Key Features of JobTrackr</h2>
         <div className="flex flex-col md:flex-row gap-12 md:gap-24">
