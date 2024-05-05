@@ -38,7 +38,7 @@ const Login = () => {
       setError('Login failed due to server error');
     }
   };
-
+  
   return (
     <div className="flex items-center justify-center min-h-screen bg-base-200">
       <div className="card w-96 bg-base-100 shadow-xl">
