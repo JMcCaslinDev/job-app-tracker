@@ -1818,20 +1818,14 @@ html {
 .mb-16 {
   margin-bottom: 4rem;
 }
-.mb-20 {
-  margin-bottom: 5rem;
-}
 .mb-3 {
   margin-bottom: 0.75rem;
 }
 .mb-4 {
   margin-bottom: 1rem;
 }
-.mb-8 {
-  margin-bottom: 2rem;
-}
-.mb-\[4px\] {
-  margin-bottom: 4px;
+.mb-6 {
+  margin-bottom: 1.5rem;
 }
 .ml-2 {
   margin-left: 0.5rem;
@@ -1914,9 +1908,6 @@ html {
 .max-w-7xl {
   max-width: 80rem;
 }
-.max-w-lg {
-  max-width: 32rem;
-}
 .max-w-md {
   max-width: 28rem;
 }
@@ -1977,9 +1968,6 @@ html {
 }
 .gap-2 {
   gap: 0.5rem;
-}
-.gap-5 {
-  gap: 1.25rem;
 }
 .gap-8 {
   gap: 2rem;
@@ -2255,6 +2243,40 @@ code {
     monospace;
 }
 
+@media (min-width: 1024px) {
+
+  .lg\:card-side {
+    align-items: stretch;
+    flex-direction: row;
+  }
+
+  .lg\:card-side :where(figure:first-child) {
+    overflow: hidden;
+    border-start-start-radius: inherit;
+    border-start-end-radius: unset;
+    border-end-start-radius: inherit;
+    border-end-end-radius: unset;
+  }
+
+  .lg\:card-side :where(figure:last-child) {
+    overflow: hidden;
+    border-start-start-radius: unset;
+    border-start-end-radius: inherit;
+    border-end-start-radius: unset;
+    border-end-end-radius: inherit;
+  }
+
+  .lg\:card-side figure > * {
+    max-width: unset;
+  }
+
+  :where(.lg\:card-side figure > *) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
 .hover\:bg-\[rgb\(146\2c 153\2c 167\)\]:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(146 153 167 / var(--tw-bg-opacity));
@@ -2469,10 +2491,6 @@ code {
 
   .lg\:gap-24 {
     gap: 6rem;
-  }
-
-  .lg\:gap-8 {
-    gap: 2rem;
   }
 
   .lg\:px-8 {
