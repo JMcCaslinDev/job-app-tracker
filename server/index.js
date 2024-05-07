@@ -380,37 +380,55 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
 });
 
 
-// Adding scraping route for auto add
-const axios = require('axios');
+const https = require('https');
+const http = require('http');
+const cheerio = require('cheerio');
 
 app.post('/api/scrape-job-posting', async (req, res) => {
   try {
     const { url } = req.body;
-    const response = await axios.get(url);
-    const html = response.data;
-    const $ = cheerio.load(html);
 
-    const companyName = $('a[data-tracking-control-name="public_jobs_topcard-org-name"]').text().trim();
-    const jobTitle = $('h1').text().trim();
-    const jobDescription = $('div.jobs-description__container').text().trim();
-    const location = $('span[class*="job-details-job-insight__caption"]').text().trim();
-    const payRange = $('div[class*="jobs-salary-main-rail-card__salary-label-container"]').siblings('p').text().trim();
-    const jobType = $('span[class*="job-details-job-insight-text-button"]').first().text().trim();
-    
-    res.json({
-      companyName,
-      jobTitle,
-      jobDescription,
-      location,
-      payRange,
-      jobType,
+    if (!url || url.trim() === '') {
+      return res.status(400).json({ error: 'URL is required' });
+    }
+
+    const client = url.startsWith('https') ? https : http;
+
+    client.get(url, (response) => {
+      let html = '';
+
+      response.on('data', (chunk) => {
+        html += chunk;
+      });
+
+      response.on('end', () => {
+        const $ = cheerio.load(html);
+
+        const companyName = $('a[data-tracking-control-name="public_jobs_topcard-org-name"]').text().trim();
+        const jobTitle = $('h1').text().trim();
+        const jobDescription = $('div.jobs-description__container').text().trim();
+        const location = $('span[class*="job-details-job-insight__caption"]').text().trim();
+        const payRange = $('div[class*="jobs-salary-main-rail-card__salary-label-container"]').siblings('p').text().trim();
+        const jobType = $('span[class*="job-details-job-insight-text-button"]').first().text().trim();
+
+        res.json({
+          companyName,
+          jobTitle,
+          jobDescription,
+          location,
+          payRange,
+          jobType,
+        });
+      });
+    }).on('error', (error) => {
+      console.error('Error making the request:', error);
+      res.status(500).json({ error: 'Failed to scrape job posting' });
     });
   } catch (error) {
     console.error('Error scraping job posting:', error);
     res.status(500).json({ error: 'Failed to scrape job posting' });
   }
 });
-
 
 
 

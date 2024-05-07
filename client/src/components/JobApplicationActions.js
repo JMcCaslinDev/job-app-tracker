@@ -26,7 +26,7 @@ const JobApplicationActions = ({ openModal }) => {
   return (
     <div className="job-application-actions">
       <div className="url-input-section">
-        <input type="text" className="url-input" placeholder="https://" readOnly />
+        <input type="text" className="url-input" placeholder="https://" />
         <button onClick={handleAutoAdd}>Auto Add</button>
       </div>
       <button onClick={handleManualAdd}>Manual Add</button>
