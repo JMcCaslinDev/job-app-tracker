@@ -403,12 +403,16 @@ app.post('/api/scrape-job-posting', async (req, res) => {
       response.on('end', () => {
         const $ = cheerio.load(html);
 
-        const companyName = $('a[data-tracking-control-name="public_jobs_topcard-org-name"]').text().trim();
-        const jobTitle = $('h1').text().trim();
-        const jobDescription = $('div.jobs-description__container').text().trim();
-        const location = $('span[class*="job-details-job-insight__caption"]').text().trim();
-        const payRange = $('div[class*="jobs-salary-main-rail-card__salary-label-container"]').siblings('p').text().trim();
-        const jobType = $('span[class*="job-details-job-insight-text-button"]').first().text().trim();
+        const companyName = $('a.app-aware-link[target="_self"]').text().trim() || '';
+        const jobTitle = $('h1.t-24.t-bold.inline').text().trim() || '';
+        const jobDescription = $('div.jobs-description__container').text().trim() || '';
+        const location = $('span.job-details-jobs-unified-top-card__job-insight-view-model-secondary').first().text().trim() || '';
+        
+        const payRangeElement = $('li.job-details-jobs-unified-top-card__job-insight--highlight span').first();
+        const payRange = payRangeElement.text().trim().replace(/\s+/g, ' ') || '';
+
+        const jobTypeElement = $('li.job-details-jobs-unified-top-card__job-insight--highlight span.job-details-jobs-unified-top-card__job-insight-view-model-secondary');
+        const jobType = jobTypeElement.eq(1).text().trim() || '';
 
         res.json({
           companyName,
