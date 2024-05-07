@@ -385,6 +385,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
 app.post('/api/scrape-job-posting', async (req, res) => {
   try {
     const { url } = req.body;
+    console.log("\nURL: ", url, "\n");
 
     if (!url || url.trim() === '') {
       return res.status(400).json({ error: 'URL is required' });

@@ -14,6 +14,7 @@ const JobApplicationActions = ({ openModal }) => {
       body: JSON.stringify({ url }),
     });
     const scrapedData = await response.json();
+    console.log("\nScraped Data: ", scrapedData, "\n");
     // Use scrapedData to populate the form fields
     // Example: document.querySelector('#company_name').value = scrapedData.companyName;
     // ... populate other fields similarly
