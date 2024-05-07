@@ -395,25 +395,25 @@ app.post('/api/scrape-job-posting', async (req, res) => {
 
     client.get(url, (response) => {
       let html = '';
-
+    
       response.on('data', (chunk) => {
         html += chunk;
       });
-
+    
       response.on('end', () => {
         const $ = cheerio.load(html);
-
-        const companyName = $('a.app-aware-link[target="_self"]').text().trim() || '';
-        const jobTitle = $('h1.t-24.t-bold.inline').text().trim() || '';
-        const jobDescription = $('div.jobs-description__container').text().trim() || '';
-        const location = $('span.job-details-jobs-unified-top-card__job-insight-view-model-secondary').first().text().trim() || '';
-        
-        const payRangeElement = $('li.job-details-jobs-unified-top-card__job-insight--highlight span').first();
-        const payRange = payRangeElement.text().trim().replace(/\s+/g, ' ') || '';
-
-        const jobTypeElement = $('li.job-details-jobs-unified-top-card__job-insight--highlight span.job-details-jobs-unified-top-card__job-insight-view-model-secondary');
-        const jobType = jobTypeElement.eq(1).text().trim() || '';
-
+    
+        const companyName = $('div.job-details-jobs-unified-top-card__primary-description-container a.app-aware-link').first().text().trim();
+        const jobTitle = $('h1.t-24.t-bold.inline').text().trim();
+        const jobDescription = $('div.jobs-description__container').text().trim();
+        const location = $('div.job-details-jobs-unified-top-card__primary-description-container').text().split('·')[1].trim();
+    
+        const payRangeElement = $('span.job-details-jobs-unified-top-card__job-insight span').first();
+        const payRange = payRangeElement.text().trim().replace(/\s+/g, ' ');
+    
+        const jobTypeElement = $('span.job-details-jobs-unified-top-card__job-insight-view-model-secondary').first();
+        const jobType = jobTypeElement.text().trim();
+    
         res.json({
           companyName,
           jobTitle,
@@ -427,6 +427,7 @@ app.post('/api/scrape-job-posting', async (req, res) => {
       console.error('Error making the request:', error);
       res.status(500).json({ error: 'Failed to scrape job posting' });
     });
+    
   } catch (error) {
     console.error('Error scraping job posting:', error);
     res.status(500).json({ error: 'Failed to scrape job posting' });
