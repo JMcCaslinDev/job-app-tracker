@@ -382,6 +382,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
 
 
 // Auto Add url has been clicked
+// Auto Add URL has been clicked
 app.post('/api/scrape-job-posting', async (req, res) => {
   try {
     const { url } = req.body;
@@ -391,48 +392,51 @@ app.post('/api/scrape-job-posting', async (req, res) => {
       return res.status(400).json({ error: 'URL is required' });
     }
 
-    const client = url.startsWith('https') ? https : http;
+    const client = url.startsWith('https') ? require('https') : require('http');
 
     client.get(url, (response) => {
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        return res.status(500).json({ error: 'Failed to load page, status code: ' + response.statusCode });
+      }
+
       let html = '';
-    
+
       response.on('data', (chunk) => {
         html += chunk;
       });
-    
+
       response.on('end', () => {
         const $ = cheerio.load(html);
-    
-        const companyName = $('div.job-details-jobs-unified-top-card__primary-description-container a.app-aware-link').first().text().trim();
-        const jobTitle = $('h1.t-24.t-bold.inline').text().trim();
-        const jobDescription = $('div.jobs-description__container').text().trim();
-        const location = $('div.job-details-jobs-unified-top-card__primary-description-container').text().split('·')[1].trim();
-    
-        const payRangeElement = $('span.job-details-jobs-unified-top-card__job-insight span').first();
-        const payRange = payRangeElement.text().trim().replace(/\s+/g, ' ');
-    
-        const jobTypeElement = $('span.job-details-jobs-unified-top-card__job-insight-view-model-secondary').first();
-        const jobType = jobTypeElement.text().trim();
-    
+
+        const companyName = $('a[data-test-app-aware-link]').first().text().trim();
+        const jobTitle = $('h1:contains("Engineer")').first().text().trim(); // assuming job titles contain 'Engineer'
+        const jobDescription = $('[data-test-job-description]').text().trim();
+        const location = $('span:contains("United States")').first().text().trim(); // assuming location contains 'United States'
+
+        const payRange = $('span:contains("$")').first().text().trim().replace(/\s+/g, ' ');
+        const jobType = $('span:contains("Full-time")').first().text().trim(); // assuming job type mentions 'Full-time'
+
         res.json({
           companyName,
           jobTitle,
           jobDescription,
           location,
           payRange,
-          jobType,
+          jobType
         });
       });
+
     }).on('error', (error) => {
       console.error('Error making the request:', error);
       res.status(500).json({ error: 'Failed to scrape job posting' });
     });
-    
+
   } catch (error) {
-    console.error('Error scraping job posting:', error);
-    res.status(500).json({ error: 'Failed to scrape job posting' });
+    console.error('Error in scrape-job-posting:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
+
 
 
 
