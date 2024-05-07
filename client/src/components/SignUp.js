@@ -6,18 +6,6 @@ import '../css/signUp.css';
 const SignUp = () => {
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      navigate('/dashboard');
-    }
-  }, [navigate]);
-
-  //  login route button action
-  const handleLoginClick = () => {
-    navigate('/login');
-  };
-
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [firstName, setFirstName] = useState('');
@@ -54,6 +42,11 @@ const SignUp = () => {
       console.error('Error:', error);
       // Handle signup error, e.g., display an error message
     }
+  };
+
+  //  login route button action
+  const handleLoginClick = () => {
+  navigate('/login');
   };
 
   return (
