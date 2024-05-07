@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
 const moment = require('moment-timezone');
+const cheerio = require('cheerio');
 
 
 const app = express();
@@ -377,6 +378,43 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
+
+
+// Adding scraping route for auto add
+const axios = require('axios');
+
+app.post('/api/scrape-job-posting', async (req, res) => {
+  try {
+    const { url } = req.body;
+    const response = await axios.get(url);
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    const companyName = $('a[data-tracking-control-name="public_jobs_topcard-org-name"]').text().trim();
+    const jobTitle = $('h1').text().trim();
+    const jobDescription = $('div.jobs-description__container').text().trim();
+    const location = $('span[class*="job-details-job-insight__caption"]').text().trim();
+    const payRange = $('div[class*="jobs-salary-main-rail-card__salary-label-container"]').siblings('p').text().trim();
+    const jobType = $('span[class*="job-details-job-insight-text-button"]').first().text().trim();
+    
+    res.json({
+      companyName,
+      jobTitle,
+      jobDescription,
+      location,
+      payRange,
+      jobType,
+    });
+  } catch (error) {
+    console.error('Error scraping job posting:', error);
+    res.status(500).json({ error: 'Failed to scrape job posting' });
+  }
+});
+
+
+
+
+
 
 
 
