@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken');
 const { Pool } = require('pg');
 const moment = require('moment-timezone');
 const cheerio = require('cheerio');
-
+const https = require('https');
+const http = require('http');
 
 const app = express();
 app.use(express.json());
@@ -380,10 +381,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
 });
 
 
-const https = require('https');
-const http = require('http');
-const cheerio = require('cheerio');
-
+// Auto Add url has been clicked
 app.post('/api/scrape-job-posting', async (req, res) => {
   try {
     const { url } = req.body;
