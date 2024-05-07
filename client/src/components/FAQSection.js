@@ -6,7 +6,7 @@ const FAQSection = () => {
   const faqs = [
     {
       question: 'Why do I need JobTrackr?',
-      answer: 'To streamline and enhance the efficiency of your job search process.',
+      answer: 'To streamline job search and save time during the process.',
     },
     {
       question: 'Is there a subscription model for JobTrackr?',
