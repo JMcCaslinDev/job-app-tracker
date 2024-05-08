@@ -24,15 +24,17 @@
   button {
     padding: 10px 10px; /* Padding inside the buttons */
     cursor: pointer;
+    border-radius: 8px;
+    background-color: #504E55; /* Light grey background */
     /* Add additional styles for your buttons here */
   }
   
   /* Additional styles to make the buttons look more distinct */
   button:hover {
-    background-color: #f2f2f2; /* Light grey background on hover */
+    background-color: #6b6a6c; /* Light grey background on hover */
   }
   
   .url-input::placeholder {
-    color: #a8a8a8; /* Lighter text for placeholder */
+    color: #888787; /* Lighter text for placeholder */
   }
   

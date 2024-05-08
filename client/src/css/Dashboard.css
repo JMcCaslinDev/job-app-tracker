@@ -41,7 +41,6 @@
 .job-application-history {
   flex-grow: 1;
   background-color: #333336; /* Slightly lighter grey for the history section */
-  padding: 20px;
   overflow-y: auto; /* Scrollable content for history section */
 }
 

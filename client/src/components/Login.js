@@ -23,6 +23,8 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log("Trying to go to /api/login\n");
+      console.log("\nusername: ", username, '\n');
       const response = await axios.post('/api/login', {
         username,
         password,
@@ -31,6 +33,7 @@ const Login = () => {
         localStorage.setItem('token', response.data.token);
         navigate('/dashboard');
       } else {
+        console.log("\nResponse from backend bad!\n");
         setError('Invalid username or password');
       }
     } catch (error) {

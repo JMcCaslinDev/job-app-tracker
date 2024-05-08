@@ -1,7 +1,8 @@
 /* JobApplicationHistory.css */
 .job-application-history {
     width: 100%;
-    padding: 0 20px;
+    padding-left: 20px;
+    padding-right: 20px;
     box-sizing: border-box;
 }
 

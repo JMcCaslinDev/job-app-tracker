@@ -796,7 +796,6 @@ html {
   transition-duration: 200ms;
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
   border-width: var(--border-btn, 1px);
-  animation: button-pop var(--animation-btn, 0.25s) ease-out;
   transition-property: color, background-color, border-color, opacity, box-shadow, transform;
   --tw-text-opacity: 1;
   color: var(--fallback-bc,oklch(var(--bc)/var(--tw-text-opacity)));
@@ -1153,6 +1152,12 @@ html {
 .btm-nav > * .label {
   font-size: 1rem;
   line-height: 1.5rem;
+}
+@media (prefers-reduced-motion: no-preference) {
+
+  .btn {
+    animation: button-pop var(--animation-btn, 0.25s) ease-out;
+  }
 }
 .btn:active:hover,
   .btn:active:focus {

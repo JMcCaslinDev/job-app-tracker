@@ -3,7 +3,22 @@ import '../css/JobApplicationRow.css';
 
 const JobApplicationRow = ({ application, onEdit }) => {
   const { company_name, job_title, date_applied, application_status, employment_type, work_location_mode, pay_amount, pay_type } = application;
-  const formattedPayAmount = pay_type === 'Salary' ? `$${pay_amount.toLocaleString()}` : `$${pay_amount}/hr`;
+
+  // Function to format pay amount based on the pay_type
+  const formatPayAmount = () => {
+    switch (pay_type) {
+      case 'Salary':
+        return `$${pay_amount.toLocaleString()}`;
+      case 'Hourly':
+        return `$${pay_amount}/hr`;
+      case 'Contract':
+        return `$${pay_amount} per contract`;
+      default:
+        return `$${pay_amount}`;
+    }
+  };
+
+  const formattedPayAmount = formatPayAmount();  // Use the formatPayAmount function to determine how pay is displayed
 
   const handleEdit = () => {
     onEdit(application);

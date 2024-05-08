@@ -26,9 +26,13 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
   const [formData, setFormData] = useState(initialData || initialFormData);
 
   useEffect(() => {
-    if (isOpen && initialData) {
-      const localTime = moment.utc(initialData.date_applied).local().format('YYYY-MM-DD');
-      setFormData({ ...initialData, date_applied: localTime });
+    if (isOpen) {
+      if (initialData) {
+        const localTime = moment.utc(initialData.date_applied).local().format('YYYY-MM-DD');
+        setFormData({ ...initialData, date_applied: localTime });
+      } else {
+        setFormData({ ...initialFormData, date_applied: moment().format('YYYY-MM-DD') });
+      }
     } else {
       setFormData(initialFormData);
     }
@@ -54,7 +58,9 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
       };
       let response;
       if (initialData) {
-        response = await axios.put(`/api/job-applications/${initialData.index}`, payload, {
+        console.log("\nInitialData: ", initialData, "\n");
+        console.log("\ninitialData._id: ", initialData._id, "\n");
+        response = await axios.put(`/api/job-applications/${initialData._id}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
@@ -88,20 +94,27 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
           <label>Company Name:
             <input type="text" name="company_name" value={formData.company_name || ''} onChange={handleChange} />
           </label>
-          <label>Pay Amount:
+          <label>Base Pay:
             <input type="number" name="pay_amount" value={formData.pay_amount || 0} onChange={handleChange} onFocus={(e) => e.target.select()} />
           </label>
-          <label>Pay Amount Max:
+          <label>Max Pay:
             <input type="number" name="pay_amount_max" value={formData.pay_amount_max || 0} onChange={handleChange} onFocus={(e) => e.target.select()} />
           </label>
           <label>Pay Type:
-            <input type="text" name="pay_type" value={formData.pay_type || ''} onChange={handleChange} />
+            <select name="pay_type" value={formData.pay_type} onChange={handleChange}>
+              <option value="Salary">Salary</option>
+              <option value="Hourly">Hourly</option>
+              <option value="Contract">Contract</option>
+            </select>
           </label>
           <label>Job Description:
             <textarea name="job_description" value={formData.job_description || ''} onChange={handleChange}></textarea>
           </label>
           <label>Notes:
             <textarea name="notes" value={formData.notes || ''} onChange={handleChange}></textarea>
+          </label>
+          <label>Location:
+            <input type="text" name="location" value={formData.location || ''} onChange={handleChange} />
           </label>
           <label>Application Method:
             <select name="application_method" value={formData.application_method} onChange={handleChange}>
@@ -125,9 +138,6 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
               <option value="Hybrid">Hybrid</option>
             </select>
           </label>
-          <label>Location:
-            <input type="text" name="location" value={formData.location || ''} onChange={handleChange} />
-          </label>
           <label>Experience Level:
             <select name="experience_level" value={formData.experience_level} onChange={handleChange}>
               <option value="Entry Level">Entry Level</option>
@@ -146,9 +156,6 @@ const AddJobApplicationModal = ({ isOpen, onClose, onAddSuccess, initialFormData
           </label>
           <label>Date Applied:
             <input type="date" name="date_applied" value={formData.date_applied || ''} onChange={handleChange} />
-          </label>
-          <label>Pinned:
-            <input type="checkbox" name="pinned" checked={formData.pinned || false} onChange={handleChange} />
           </label>
           <button type="submit">Save</button>
           {initialData && (

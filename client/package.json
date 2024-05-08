@@ -25,6 +25,8 @@
     "build:css": "npx postcss-cli src/index.css -o src/output.css"
     
   },  
+  "proxy": "http://localhost:5000",
+  
   "devDependencies": {
     "postcss-cli": "^9.0.1"
 },

@@ -22,7 +22,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <NavbarButton text="Dashboard" className="dashboard"  onClick={handleDashboardNavButtonClicked} />
-      <NavbarButton text="Settings" className="settings" />
+      {/* <NavbarButton text="Settings" className="settings" /> */}
       <div className="navbar-spacer"></div>
       <NavbarButton text="Logout" className="logout" onClick={handleLogout} />
     </nav>

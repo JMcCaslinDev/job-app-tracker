@@ -12,7 +12,7 @@ const JobApplicationActions = ({ openModal }) => {
 
   return (
     <div className="job-application-actions">
-      <button onClick={handleManualAdd}>Manual Add</button>
+      <button onClick={handleManualAdd}>Quick Add</button>
     </div>
   );
 };
