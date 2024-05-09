@@ -448,7 +448,13 @@ app.post('/api/scrape-job-posting', async (req, res) => {
 
 
 
-
+app.post('/api/jobs', (req, res) => {
+  const jobData = req.body;
+  console.log("\njobData: ", jobData, "\n");
+  // Save the jobData to your database
+  // ...
+  res.status(201).json({ message: 'Job saved successfully' });
+});
 
 
 
