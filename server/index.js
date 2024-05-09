@@ -123,7 +123,12 @@ app.post('/api/signup', async (req, res) => {
       daily_application_goal: defaultGoal
     });
     await newAccount.save();
-    const token = jwt.sign({ accountId: newAccount._id.toString() }, process.env.JWT_SECRET); // Convert _id to string
+    const token = jwt.sign(
+      { accountId: newAccount._id.toString() },  // Convert _id to string
+      process.env.JWT_SECRET,
+      { expiresIn: '12h' }  // Token now expires in 12 hours
+    );
+   
     res.json({ token, success: true });
   } catch (error) {
     console.error('Error signing up:', error);
@@ -148,7 +153,11 @@ app.post('/api/login', async (req, res) => {
     }
 
     if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign({ accountId: user._id.toString() }, process.env.JWT_SECRET); // Convert _id to string
+      const token = jwt.sign(
+        { accountId: user._id.toString() },
+        process.env.JWT_SECRET,
+        { expiresIn: '12h' }  // Token now expires in 12 hours
+      );
       console.log("Token generated successfully:", token);
       return res.json({ token, success: true });
     } else {
@@ -160,7 +169,6 @@ app.post('/api/login', async (req, res) => {
     return res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 
 
