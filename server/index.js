@@ -23,11 +23,12 @@ if (process.env.DEVELOPMENT) {
   console.log("Production mode: Enabling CORS with specific restrictions");
   const corsOptions = {
     origin: function (origin, callback) {
+      console.log("Received origin:", origin); // Log the origin for debugging
       const allowedOrigins = [
-        'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm', // Chrome Extension ID
-        'https://job-app-tracker-website-b2cef22d84a2.herokuapp.com' // Your production website URL
+        'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm',
+        'https://job-app-tracker-website-b2cef22d84a2.herokuapp.com'
       ];
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'), false);
@@ -38,6 +39,7 @@ if (process.env.DEVELOPMENT) {
   };
   app.use(cors(corsOptions));
 }
+
 
 app.use(express.json());
 
