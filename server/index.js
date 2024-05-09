@@ -13,11 +13,27 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 
 const app = express();
-// Conditional CORS setup
-if (process.env.DEVELOPMENT) {
-  console.log("\nFound Development Cors variable in .env\n");
-  app.use(cors()); // Enable CORS for all domains during development
-}
+
+
+// Configure CORS
+const corsOptions = {
+  origin: function (origin, callback) {
+    const allowedOrigins = [
+      'http://localhost:3000', // Allow requests from your local development server
+      'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm' // Allow requests from your Chrome extension
+    ];
+
+    if (process.env.DEVELOPMENT || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-timezone'],
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 
