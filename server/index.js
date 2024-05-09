@@ -15,26 +15,29 @@ require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const app = express();
 
 
-// Configure CORS
-const corsOptions = {
-  origin: function (origin, callback) {
-    const allowedOrigins = [
-      'http://localhost:3000', 
-      'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm' // Replace with your actual Chrome extension ID
-    ];
-
-    if (process.env.DEVELOPMENT || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-user-timezone'],
-};
-
-
-app.use(cors(corsOptions));
+// Conditional CORS setup
+if (process.env.DEVELOPMENT) {
+  console.log("Development mode: Enabling CORS for all domains");
+  app.use(cors()); // Enable CORS for all domains during development
+} else {
+  console.log("Production mode: Enabling CORS with specific restrictions");
+  const corsOptions = {
+    origin: function (origin, callback) {
+      const allowedOrigins = [
+        'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm', // Chrome Extension ID
+        'https://job-app-tracker-website-b2cef22d84a2.herokuapp.com' // Your production website URL
+      ];
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'), false);
+      }
+    },
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-user-timezone']
+  };
+  app.use(cors(corsOptions));
+}
 
 app.use(express.json());
 
