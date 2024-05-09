@@ -19,8 +19,8 @@ const app = express();
 const corsOptions = {
   origin: function (origin, callback) {
     const allowedOrigins = [
-      'http://localhost:3000', // Allow requests from your local development server
-      'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm' // Allow requests from your Chrome extension
+      'http://localhost:3000', 
+      'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm' // Replace with your actual Chrome extension ID
     ];
 
     if (process.env.DEVELOPMENT || allowedOrigins.includes(origin)) {
@@ -32,6 +32,7 @@ const corsOptions = {
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-user-timezone'],
 };
+
 
 app.use(cors(corsOptions));
 
