@@ -26,7 +26,8 @@ if (process.env.DEVELOPMENT) {
       console.log("Received origin:", origin); // Log the origin for debugging
       const allowedOrigins = [
         'chrome-extension://olpnpnbilgblmjhddofgedonaiekiilm',
-        'https://job-app-tracker-website-b2cef22d84a2.herokuapp.com'
+        'https://job-app-tracker-website-b2cef22d84a2.herokuapp.com',
+        'https://www.indeed.com'
       ];
       if (allowedOrigins.includes(origin) || !origin) {
         callback(null, true);
