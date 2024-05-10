@@ -502,16 +502,13 @@ app.post('/api/jobs', async (req, res) => {
     const jobData = req.body;
     console.log("\njobData: ", jobData, "\n");
 
-    // Get the token from the Authorization header
     const token = req.headers.authorization;
     if (!token) {
       return res.status(401).json({ error: 'No token provided' });
     }
 
-    // Remove the "Bearer " prefix if present
     const tokenWithoutPrefix = token.startsWith('Bearer ') ? token.slice(7) : token;
 
-    // Verify the token and extract the accountId
     jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
         return res.status(401).json({ error: 'Invalid token' });
@@ -520,13 +517,11 @@ app.post('/api/jobs', async (req, res) => {
       const accountId = decoded.accountId;
       console.log("\naccountId: ", accountId, "\n");
 
-      // Set default values for base_pay, max_pay, pinned, and date_applied
-      const base_pay = jobData.base_pay ? Number(jobData.base_pay) : 0.0;
-      const max_pay = jobData.max_pay ? Number(jobData.max_pay) : 0.0;
+      const base_pay = jobData.base_pay ? parseFloat(jobData.base_pay) : 0.0;
+      const max_pay = jobData.max_pay ? parseFloat(jobData.max_pay) : 0.0;
       const pinned = jobData.pinned || false;
       const date_applied = jobData.date_applied ? new Date(jobData.date_applied) : new Date();
 
-      // Organize the job data into the format that matches the jobApplicationSchema
       const formattedJobData = {
         account_id: accountId,
         job_title: jobData.job_title || '',
@@ -547,23 +542,36 @@ app.post('/api/jobs', async (req, res) => {
         pinned: pinned
       };
 
-      // Save the formatted job data to the database
-      const newJobApplication = new Job_Application(formattedJobData);
       try {
-        console.log("\nnewJobApplication: ", newJobApplication, "\n");
+        const newJobApplication = new Job_Application(formattedJobData);
         await newJobApplication.save();
-        res.status(201).json({ message: 'Job saved successfully' });
+        res.status(201).json({ message: 'Job saved successfully', data: newJobApplication });
       } catch (error) {
-        console.error('Error saving job:', error.message);
-        console.error('Error stack:', error.stack);
-        res.status(500).json({ error: 'Internal server error' });
+        console.error('MongoDB Error:', error);
+        if (error.name === 'MongoServerError' && error.code === 121) {
+          console.log('Validation Error Details:', error);
+          res.status(500).json({
+            error: 'Validation failed',
+            message: error.message,
+            errors: error.errors || error.errmsg
+          });
+        } else {
+          res.status(500).json({
+            error: 'Internal server error',
+            message: error.message
+          });
+        }
       }
     });
   } catch (error) {
-    console.error('Error saving job:', error);
-    res.status(500).json({ error: 'Internal server error' });
+    console.error('Unexpected Error:', error);
+    res.status(500).json({
+      error: 'Internal server error',
+      message: error.message
+    });
   }
 });
+
 
 
 
