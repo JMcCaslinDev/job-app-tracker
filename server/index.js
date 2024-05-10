@@ -66,20 +66,21 @@ mongoose.connect(process.env.MONGO_URI, {
   
   const jobApplicationSchema = new Schema({
     account_id: { type: String, required: true },
-    company_name: String,
     job_title: String,
-    application_status: String,
-    date_applied: Date,
-    job_description: String,
-    notes: String,
-    application_method: String,
-    pay_amount: Number,
-    job_posting_url: String,
-    pay_type: String,
+    company_name: String,
     employment_type: String,
     work_location_mode: String,
-    location: String,
+    date_applied: Date,
+    application_method: String,
+    pay_amount: Number,
+    pay_amount_max: Number,
+    pay_type: String,
     experience_level: String,
+    location: String,
+    application_status: String,
+    job_posting_url: String,
+    job_description: String,
+    notes: String,
     pinned: Boolean
   });
   // The (mongodb collection name, schema)
@@ -87,7 +88,22 @@ mongoose.connect(process.env.MONGO_URI, {
   const Job_Application = model('Job_Application', jobApplicationSchema);
   
 
-
+  // account_id: req.accountId,
+  // job_title,
+  // company_name,
+  // employment_type,
+  // work_location_mode,
+  // date_applied: dateInUTC,
+  // application_method,
+  // pay_amount,
+  // pay_type,
+  // experience_level,
+  // location,
+  // application_status,
+  // job_posting_url,
+  // job_description,
+  // notes,
+  // pinned,
 
 
   function verifyJwtToken(req, res, next) {
@@ -207,20 +223,20 @@ app.get('/api/user/name', verifyJwtToken, async (req, res) => {
 app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   try {
     const {
-      company_name,
       job_title,
-      application_status,
-      date_applied,
-      job_description,
-      notes,
-      application_method,
-      pay_amount,
-      job_posting_url,
-      pay_type,
+      company_name,
       employment_type,
       work_location_mode,
-      location,
+      date_applied,
+      application_method,
+      pay_amount,
+      pay_type,
       experience_level,
+      location,
+      application_status,
+      job_posting_url,
+      job_description,
+      notes,
       pinned,
       userTimezone,
     } = req.body;
@@ -230,20 +246,20 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
 
     const job_Application = new Job_Application({
       account_id: req.accountId,
-      company_name,
       job_title,
-      application_status,
-      date_applied: dateInUTC,
-      job_description,
-      notes,
-      application_method,
-      pay_amount,
-      job_posting_url,
-      pay_type,
+      company_name,
       employment_type,
       work_location_mode,
-      location,
+      date_applied: dateInUTC,
+      application_method,
+      pay_amount,
+      pay_type,
       experience_level,
+      location,
+      application_status,
+      job_posting_url,
+      job_description,
+      notes,
       pinned,
     });
 
@@ -273,20 +289,21 @@ app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res
 app.put('/api/job-applications/:applicationId', verifyJwtToken, async (req, res) => {
   try {
     const {
-      company_name,
       job_title,
-      application_status,
-      date_applied,
-      job_description,
-      notes,
-      application_method,
-      pay_amount,
-      job_posting_url,
-      pay_type,
+      company_name,
       employment_type,
       work_location_mode,
-      location,
+      date_applied,
+      application_method,
+      pay_amount,
+      pay_amount_max,
+      pay_type,
       experience_level,
+      location,
+      application_status,
+      job_posting_url,
+      job_description,
+      notes,
       pinned,
       userTimezone,
     } = req.body;
@@ -302,20 +319,21 @@ app.put('/api/job-applications/:applicationId', verifyJwtToken, async (req, res)
     const dateInUTC = date_applied ? moment.tz(date_applied, userTimezone).utc().toDate() : new Date();
 
     const updateData = {
-      company_name,
       job_title,
-      application_status,
-      date_applied: dateInUTC,
-      job_description,
-      notes,
-      application_method,
-      pay_amount,
-      job_posting_url,
-      pay_type,
+      company_name,
       employment_type,
       work_location_mode,
-      location,
+      date_applied: dateInUTC,
+      application_method,
+      pay_amount,
+      pay_amount_max,
+      pay_type,
       experience_level,
+      location,
+      application_status,
+      job_description,
+      notes,
+      job_posting_url,
       pinned,
       updated_at: Date.now(),
     };
@@ -477,7 +495,7 @@ app.post('/api/scrape-job-posting', async (req, res) => {
   }
 });
 
-
+// const dateInUTC = moment.tz(date_applied, userTimezone).utc().toDate();  //gets utc from local time zone date
 
 app.post('/api/jobs', async (req, res) => {
   try {
@@ -505,20 +523,20 @@ app.post('/api/jobs', async (req, res) => {
       // Organize the job data into the format that matches the jobApplicationSchema
       const formattedJobData = {
         account_id: accountId,
-        company_name: jobData.company_name,
         job_title: jobData.job_title,
-        application_status: jobData.application_status,
-        date_applied: new Date(jobData.date_applied),
-        job_description: jobData.job_description,
-        notes: jobData.notes,
-        application_method: jobData.application_method,
-        pay_amount: jobData.base_pay, // Assuming base_pay is the pay_amount
-        job_posting_url: jobData.job_posting_url,
-        pay_type: jobData.pay_type,
+        company_name: jobData.company_name,
         employment_type: jobData.employment_type,
         work_location_mode: jobData.work_location_mode,
-        location: jobData.location,
+        date_applied: new Date(jobData.date_applied),
+        application_method: jobData.application_method,
+        pay_amount: jobData.base_pay, // Assuming base_pay is the pay_amount
+        pay_type: jobData.pay_type,
         experience_level: jobData.experience_level,
+        location: jobData.location,
+        application_status: jobData.application_status,
+        job_posting_url: jobData.job_posting_url,
+        job_description: jobData.job_description,
+        notes: jobData.notes,
         pinned: jobData.pinned
       };
 
