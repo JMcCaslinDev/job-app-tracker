@@ -544,6 +544,7 @@ app.post('/api/jobs', async (req, res) => {
 
       try {
         const newJobApplication = new Job_Application(formattedJobData);
+        console.log('Formatted Job Data:', formattedJobData);
         await newJobApplication.save();
         res.status(201).json({ message: 'Job saved successfully', data: newJobApplication });
       } catch (error) {
