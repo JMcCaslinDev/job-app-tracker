@@ -545,6 +545,7 @@ app.post('/api/jobs', async (req, res) => {
       try {
         const newJobApplication = new Job_Application(formattedJobData);
         console.log('Formatted Job Data:', formattedJobData);
+        console.log('Formatted Job Data Types:', Object.entries(formattedJobData).map(([key, value]) => `${key}: ${typeof value}`));
         await newJobApplication.save();
         res.status(201).json({ message: 'Job saved successfully', data: newJobApplication });
       } catch (error) {
