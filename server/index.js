@@ -550,17 +550,10 @@ app.post('/api/jobs', async (req, res) => {
         console.error('MongoDB Error:', error);
         if (error.name === 'MongoServerError' && error.code === 121) {
           console.log('Validation Error Details:', error);
-          const validationErrors = error.errInfo?.details?.schemaRulesNotSatisfied || [];
           res.status(500).json({
             error: 'Validation failed',
             message: error.message,
-            validationErrors: validationErrors.map(v => ({
-              field: v.operatorName,
-              issues: v.issues.map(issue => ({
-                problem: issue.description,
-                in: issue.details
-              }))
-            }))
+            errors: error.errors || error.errmsg
           });
         } else {
           res.status(500).json({
@@ -578,7 +571,6 @@ app.post('/api/jobs', async (req, res) => {
     });
   }
 });
-
 
 
 
