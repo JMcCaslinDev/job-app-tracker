@@ -530,6 +530,7 @@ app.post('/api/jobs', async (req, res) => {
         date_applied: new Date(jobData.date_applied),
         application_method: jobData.application_method,
         pay_amount: jobData.base_pay, // Assuming base_pay is the pay_amount
+        pay_amount_max: jobData.max_pay, 
         pay_type: jobData.pay_type,
         experience_level: jobData.experience_level,
         location: jobData.location,
