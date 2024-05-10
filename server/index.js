@@ -553,7 +553,8 @@ app.post('/api/jobs', async (req, res) => {
         await newJobApplication.save();
         res.status(201).json({ message: 'Job saved successfully' });
       } catch (error) {
-        console.error('Error saving job:', error);
+        console.error('Error saving job:', error.message);
+        console.error('Error stack:', error.stack);
         res.status(500).json({ error: 'Internal server error' });
       }
     });
