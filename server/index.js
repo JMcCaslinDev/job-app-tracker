@@ -479,17 +479,65 @@ app.post('/api/scrape-job-posting', async (req, res) => {
 
 
 
-app.post('/api/jobs', (req, res) => {
-  const jobData = req.body;
-  console.log("\njobData: ", jobData, "\n");
-  // Save the jobData to your database
-  // ...
-  res.status(201).json({ message: 'Job saved successfully' });
+app.post('/api/jobs', async (req, res) => {
+  try {
+    const jobData = req.body;
+    console.log("\njobData: ", jobData, "\n");
+
+    // Get the token from the Authorization header
+    const token = req.headers.authorization;
+    if (!token) {
+      return res.status(401).json({ error: 'No token provided' });
+    }
+
+    // Remove the "Bearer " prefix if present
+    const tokenWithoutPrefix = token.startsWith('Bearer ') ? token.slice(7) : token;
+
+    // Verify the token and extract the accountId
+    jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, (err, decoded) => {
+      if (err) {
+        return res.status(401).json({ error: 'Invalid token' });
+      }
+
+      const accountId = decoded.accountId;
+      console.log("\naccountId: ", accountId, "\n");
+
+      // Organize the job data into the format that matches the jobApplicationSchema
+      const formattedJobData = {
+        account_id: accountId,
+        company_name: jobData.company_name,
+        job_title: jobData.job_title,
+        application_status: jobData.application_status,
+        date_applied: new Date(jobData.date_applied),
+        job_description: jobData.job_description,
+        notes: jobData.notes,
+        application_method: jobData.application_method,
+        pay_amount: jobData.base_pay, // Assuming base_pay is the pay_amount
+        job_posting_url: jobData.job_posting_url,
+        pay_type: jobData.pay_type,
+        employment_type: jobData.employment_type,
+        work_location_mode: jobData.work_location_mode,
+        location: jobData.location,
+        experience_level: jobData.experience_level,
+        pinned: jobData.pinned
+      };
+
+      // Save the formatted job data to the database
+      const newJobApplication = new Job_Application(formattedJobData);
+      newJobApplication.save()
+        .then(() => {
+          res.status(201).json({ message: 'Job saved successfully' });
+        })
+        .catch((error) => {
+          console.error('Error saving job:', error);
+          res.status(500).json({ error: 'Internal server error' });
+        });
+    });
+  } catch (error) {
+    console.error('Error saving job:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
-
-
-
-
 
 
 
