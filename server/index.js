@@ -512,7 +512,7 @@ app.post('/api/jobs', async (req, res) => {
     const tokenWithoutPrefix = token.startsWith('Bearer ') ? token.slice(7) : token;
 
     // Verify the token and extract the accountId
-    jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, (err, decoded) => {
+    jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
         return res.status(401).json({ error: 'Invalid token' });
       }
@@ -520,37 +520,42 @@ app.post('/api/jobs', async (req, res) => {
       const accountId = decoded.accountId;
       console.log("\naccountId: ", accountId, "\n");
 
+      // Set default values for base_pay, max_pay, pinned, and date_applied
+      const base_pay = jobData.base_pay || 0;
+      const max_pay = jobData.max_pay || 0;
+      const pinned = jobData.pinned || false;
+      const date_applied = jobData.date_applied ? new Date(jobData.date_applied) : new Date();
+
       // Organize the job data into the format that matches the jobApplicationSchema
       const formattedJobData = {
         account_id: accountId,
-        job_title: jobData.job_title,
-        company_name: jobData.company_name,
-        employment_type: jobData.employment_type,
-        work_location_mode: jobData.work_location_mode,
-        date_applied: new Date(jobData.date_applied),
-        application_method: jobData.application_method,
-        pay_amount: jobData.base_pay, // Assuming base_pay is the pay_amount
-        pay_amount_max: jobData.max_pay, 
-        pay_type: jobData.pay_type,
-        experience_level: jobData.experience_level,
-        location: jobData.location,
-        application_status: jobData.application_status,
-        job_posting_url: jobData.job_posting_url,
-        job_description: jobData.job_description,
-        notes: jobData.notes,
-        pinned: jobData.pinned
+        job_title: jobData.job_title || '',
+        company_name: jobData.company_name || '',
+        employment_type: jobData.employment_type || '',
+        work_location_mode: jobData.work_location_mode || '',
+        date_applied: date_applied,
+        application_method: jobData.application_method || '',
+        pay_amount: base_pay,
+        pay_amount_max: max_pay,
+        pay_type: jobData.pay_type || '',
+        experience_level: jobData.experience_level || '',
+        location: jobData.location || '',
+        application_status: jobData.application_status || '',
+        job_posting_url: jobData.job_posting_url || '',
+        job_description: jobData.job_description || '',
+        notes: jobData.notes || '',
+        pinned: pinned
       };
 
       // Save the formatted job data to the database
       const newJobApplication = new Job_Application(formattedJobData);
-      newJobApplication.save()
-        .then(() => {
-          res.status(201).json({ message: 'Job saved successfully' });
-        })
-        .catch((error) => {
-          console.error('Error saving job:', error);
-          res.status(500).json({ error: 'Internal server error' });
-        });
+      try {
+        await newJobApplication.save();
+        res.status(201).json({ message: 'Job saved successfully' });
+      } catch (error) {
+        console.error('Error saving job:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      }
     });
   } catch (error) {
     console.error('Error saving job:', error);
