@@ -31,6 +31,7 @@ const SignUp = () => {
         navigate('/dashboard');
       } else {
         // Handle signup error, e.g., display an error message
+        console.log("Signup failed with backend error");
       }
       // Reset form fields
       setUsername('');
@@ -39,7 +40,7 @@ const SignUp = () => {
       setLastName('');
       setEmail('');
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error during signup:', error);
       // Handle signup error, e.g., display an error message
     }
   };
