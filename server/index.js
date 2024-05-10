@@ -521,8 +521,8 @@ app.post('/api/jobs', async (req, res) => {
       console.log("\naccountId: ", accountId, "\n");
 
       // Set default values for base_pay, max_pay, pinned, and date_applied
-      const base_pay = jobData.base_pay || 0.0;
-      const max_pay = jobData.max_pay || 0.0;
+      const base_pay = jobData.base_pay ? Number(jobData.base_pay) : 0.0;
+      const max_pay = jobData.max_pay ? Number(jobData.max_pay) : 0.0;
       const pinned = jobData.pinned || false;
       const date_applied = jobData.date_applied ? new Date(jobData.date_applied) : new Date();
 
