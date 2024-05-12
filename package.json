@@ -19,6 +19,7 @@
     },
     "dependencies": {
         "daisyui": "^4.10.5",
-        "jquery": "^3.7.1"
+        "jquery": "^3.7.1",
+        "mailgun.js": "^10.2.1"
     }
 }

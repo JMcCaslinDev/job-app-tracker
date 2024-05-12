@@ -8,12 +8,15 @@ const cheerio = require('cheerio');
 const https = require('https');
 const http = require('http');
 const cors = require('cors');
+const loginRoutes = require('./loginRoute');  // Import at the top
 
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 
 const app = express();
 
+// Middleware to parse JSON bodies
+app.use(express.json());
 
 // Conditional CORS setup
 if (process.env.DEVELOPMENT) {
@@ -41,16 +44,13 @@ if (process.env.DEVELOPMENT) {
   app.use(cors(corsOptions));
 }
 
-
-app.use(express.json());
-
+//  Connect to MongoDB
 console.log('Mongo URI:', process.env.MONGO_URI);
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
-
 
   const { Schema, model } = require('mongoose');
   
@@ -87,23 +87,10 @@ mongoose.connect(process.env.MONGO_URI, {
   const Account = model('Account', accountSchema);
   const Job_Application = model('Job_Application', jobApplicationSchema);
   
+  //end MongoDB Section
 
-  // account_id: req.accountId,
-  // job_title,
-  // company_name,
-  // employment_type,
-  // work_location_mode,
-  // date_applied: dateInUTC,
-  // application_method,
-  // pay_amount,
-  // pay_type,
-  // experience_level,
-  // location,
-  // application_status,
-  // job_posting_url,
-  // job_description,
-  // notes,
-  // pinned,
+  // Use routes
+  app.use('/api', loginRoutes);
 
 
   function verifyJwtToken(req, res, next) {
@@ -494,6 +481,8 @@ app.post('/api/scrape-job-posting', async (req, res) => {
     res.status(500).json({ error: 'Server error' });
   }
 });
+
+
 
 // const dateInUTC = moment.tz(date_applied, userTimezone).utc().toDate();  //gets utc from local time zone date
 
