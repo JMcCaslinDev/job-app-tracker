@@ -1,19 +1,12 @@
 const path = require('path');
 const express = require('express');
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');
-const cheerio = require('cheerio');
-const https = require('https');
-const http = require('http');
 const cors = require('cors');
 const loginRoutes = require('./loginRoute');  // Import at the top
-
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
-
-
 const app = express();
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 // Middleware to parse JSON bodies
 app.use(express.json());
@@ -55,13 +48,11 @@ mongoose.connect(process.env.MONGO_URI, {
   const { Schema, model } = require('mongoose');
   
   const accountSchema = new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true },
-    first_name: String,
-    last_name: String,
     email: { type: String, required: true },
     daily_application_goal: Number,
-    created_at: { type: Date, default: Date.now }
+    created_at: { type: Date, default: Date.now },
+    loginToken: String,
+    tokenExpiry: Date 
   });
   
   const jobApplicationSchema = new Schema({
@@ -86,125 +77,34 @@ mongoose.connect(process.env.MONGO_URI, {
   // The (mongodb collection name, schema)
   const Account = model('Account', accountSchema);
   const Job_Application = model('Job_Application', jobApplicationSchema);
-  
-  //end MongoDB Section
+//end MongoDB Section
 
-  // Use routes
-  app.use('/api', loginRoutes);
+// Use routes
+app.use('/api', loginRoutes);
 
-
-  function verifyJwtToken(req, res, next) {
-    const token = req.headers.authorization;
-    if (!token) {
-      return res.status(401).json({ error: 'No token provided' });
-    }
-  
-    const tokenWithoutPrefix = token.startsWith('Bearer ') ? token.slice(7) : token;
-    jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return res.status(401).json({ error: 'Invalid token' });
-      }
-      req.accountId = decoded.accountId; // Ensure this matches the name used in jwt.sign
-      next();
-    });
+//  Verify tokens are correct
+function verifyJwtToken(req, res, next) {
+  const token = req.headers.authorization;
+  if (!token) {
+    return res.status(401).json({ error: 'No token provided' });
   }
+
+  const tokenWithoutPrefix = token.startsWith('Bearer ') ? token.slice(7) : token;
+  jwt.verify(tokenWithoutPrefix, process.env.JWT_SECRET, (err, decoded) => {
+    if (err) {
+      return res.status(401).json({ error: 'Invalid token' });
+    }
+    req.accountId = decoded.accountId; // Ensure this matches the name used in jwt.sign
+    next();
+  });
+}
   
-
-
-// User signup
-app.post('/api/signup', async (req, res) => {
-  try {
-    const { username, password, firstName, lastName, email } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const defaultGoal = 10;
-    const newAccount = new Account({
-      username,
-      password: hashedPassword,
-      first_name: firstName,
-      last_name: lastName,
-      email,
-      daily_application_goal: defaultGoal
-    });
-    await newAccount.save();
-    const token = jwt.sign(
-      { accountId: newAccount._id.toString() },  // Convert _id to string
-      process.env.JWT_SECRET,
-      { expiresIn: '12h' }  // Token now expires in 12 hours
-    );
-   
-    res.json({ token, success: true });
-  } catch (error) {
-    console.error('Error signing up:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-
-
-
-
-// User login
-app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
-  console.log("Login Request Received:", req.body);
-  try {
-    const user = await Account.findOne({ username: username.trim() });
-
-    if (!user) {
-      console.error("No user found for username:", username.trim());
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    if (await bcrypt.compare(password, user.password)) {
-      const token = jwt.sign(
-        { accountId: user._id.toString() },
-        process.env.JWT_SECRET,
-        { expiresIn: '12h' }  // Token now expires in 12 hours
-      );
-      console.log("Token generated successfully:", token);
-      return res.json({ token, success: true });
-    } else {
-      console.error("Invalid credentials provided for username:", username.trim());
-      return res.status(401).json({ error: 'Invalid credentials' });
-    }
-  } catch (error) {
-    console.error('Error logging in:', error);
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-
-
-
-
 // Protected dashboard route
 app.get('/api/dashboard', verifyJwtToken, (req, res) => {
   console.log("\nEntered /api/dashboard route\n");
   // If the user is authenticated, send the dashboard data
   // res.json({});
 });
-
-
-
-// Endpoint to get user's first and last name by account_id
-app.get('/api/user/name', verifyJwtToken, async (req, res) => {
-  try {
-    const { accountId } = req;
-    console.log("\naccountId: ", accountId, "\n");
-    const user = await Account.findOne({ _id: accountId });
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-    const { first_name: firstName, last_name: lastName } = user;
-    res.json({ firstName, lastName });
-  } catch (error) {
-    console.error('Error retrieving user name:', error);
-    res.status(500).json({ error: 'Internal server error' });
-  }
-});
-
-
-
 
 // POST endpoint for creating a new job application
 app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
@@ -258,8 +158,7 @@ app.post('/api/job-applications', verifyJwtToken, async (req, res) => {
   }
 });
 
-
-// Get all job applications for a user
+// Get all job applications for a specific accountId
 app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res) => {
   try {
     const job_Applications = await Job_Application.find({ account_id: req.accountId });
@@ -270,9 +169,7 @@ app.get('/api/user/return-all/job-applications', verifyJwtToken, async (req, res
   }
 });
 
-
 // PUT endpoint for updating a job application
-
 app.put('/api/job-applications/:applicationId', verifyJwtToken, async (req, res) => {
   try {
     const {
@@ -345,9 +242,6 @@ app.put('/api/job-applications/:applicationId', verifyJwtToken, async (req, res)
   }
 });
 
-
-
-
 // Delete a job application by ID
 app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
   try {
@@ -365,7 +259,6 @@ app.delete('/api/job-applications/:id', verifyJwtToken, async (req, res) => {
     res.status(500).json({ error: 'Internal server error' });
   }
 });
-
 
 // Endpoint to get user's daily application goal
 app.get('/api/user/daily-goal', verifyJwtToken, async (req, res) => {
@@ -426,66 +319,7 @@ app.get('/api/user/applications-left', verifyJwtToken, async (req, res) => {
   }
 });
 
-
-// Auto Add url has been clicked
-app.post('/api/scrape-job-posting', async (req, res) => {
-  try {
-    const { url } = req.body;
-    console.log("\nURL: ", url, "\n");
-
-    if (!url || url.trim() === '') {
-      return res.status(400).json({ error: 'URL is required' });
-    }
-
-    const client = url.startsWith('https') ? require('https') : require('http');
-
-    client.get(url, (response) => {
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        return res.status(500).json({ error: 'Failed to load page, status code: ' + response.statusCode });
-      }
-
-      let html = '';
-
-      response.on('data', (chunk) => {
-        html += chunk;
-      });
-
-      response.on('end', () => {
-        const $ = cheerio.load(html);
-
-        const companyName = $('a[data-test-app-aware-link]').first().text().trim();
-        const jobTitle = $('h1:contains("Engineer")').first().text().trim(); // assuming job titles contain 'Engineer'
-        const jobDescription = $('[data-test-job-description]').text().trim();
-        const location = $('span:contains("United States")').first().text().trim(); // assuming location contains 'United States'
-
-        const payRange = $('span:contains("$")').first().text().trim().replace(/\s+/g, ' ');
-        const jobType = $('span:contains("Full-time")').first().text().trim(); // assuming job type mentions 'Full-time'
-
-        res.json({
-          companyName,
-          jobTitle,
-          jobDescription,
-          location,
-          payRange,
-          jobType
-        });
-      });
-
-    }).on('error', (error) => {
-      console.error('Error making the request:', error);
-      res.status(500).json({ error: 'Failed to scrape job posting' });
-    });
-
-  } catch (error) {
-    console.error('Error in scrape-job-posting:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
-});
-
-
-
-// const dateInUTC = moment.tz(date_applied, userTimezone).utc().toDate();  //gets utc from local time zone date
-
+//  Store Job Data from chrome extension data to mongoDB
 app.post('/api/jobs', async (req, res) => {
   try {
     const jobData = req.body;
@@ -570,12 +404,9 @@ app.post('/api/jobs', async (req, res) => {
   }
 });
 
-
-
-
-
+//
 // ALL API Routes Above Here
-
+//
 
 // Serve the React app in production
 if (process.env.NODE_ENV === 'production') {
@@ -584,7 +415,6 @@ if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, '..', 'client', 'build', 'index.html'));
   });
 }
-
 
 const PORT = process.env.PORT || 5000 || 3000;
 app.listen(PORT, () => {
