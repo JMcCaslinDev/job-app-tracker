@@ -19,7 +19,7 @@ router.post('/request-login-link', async (req, res) => {
     account.tokenExpiry = expires;
     await account.save();
 
-    const link = `http://localhost:3000/login?token=${token}&email=${encodeURIComponent(email)}&target=_self`;
+    const link = `http://localhost:3000/login?token=${token}&email=${encodeURIComponent(email)}`;
     await sendLoginEmail(email, link);
 
     res.send({ message: 'Login link has been sent to your email.' });

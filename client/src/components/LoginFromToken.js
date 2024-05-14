@@ -13,16 +13,7 @@ function LoginFromToken() {
     const emailParam = searchParams.get('email');
 
     if (token && emailParam) {
-      // Check if the login page is already open in another tab
-      const loginTab = window.opener;
-      if (loginTab) {
-        // If the login page is open, switch to that tab and close the current tab
-        loginTab.focus();
-        window.close();
-      } else {
-        // If the login page is not open, proceed with token verification
-        verifyToken(token, emailParam);
-      }
+      verifyToken(token, emailParam);
     }
   }, [location]);
 
@@ -37,7 +28,6 @@ function LoginFromToken() {
     }
   };
 
-  // Requests a login email from the server
   const requestLoginLink = async () => {
     try {
       const response = await axios.post('/api/request-login-link', { email: email.toLowerCase() });

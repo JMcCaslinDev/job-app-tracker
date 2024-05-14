@@ -11,7 +11,6 @@ import WelcomeBanner from './WelcomeBanner';
 import '../css/Dashboard.css';
 
 const Dashboard = () => {
-  const [name, setName] = useState({ firstName: '', lastName: '' });
   const [dashboardData, setDashboardData] = useState([]);
   const [dailyGoal, setDailyGoal] = useState(0);
   const [applicationsLeft, setApplicationsLeft] = useState(0);
@@ -22,21 +21,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const fetchName = useCallback(async (token) => {
-    try {
-      const nameResponse = await axios.get('/api/user/name', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      if (nameResponse.data && nameResponse.data.firstName) {
-        setName({
-          firstName: nameResponse.data.firstName,
-          lastName: nameResponse.data.lastName,
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching user name:', error);
-    }
-  }, []);
+
 
   const fetchDashboardData = useCallback(async (token) => {
     try {
@@ -74,7 +59,7 @@ const Dashboard = () => {
           navigate('/');
           return;
         }
-        await fetchName(token);
+      
         await fetchDashboardData(token);
       } else {
         navigate('/');
@@ -82,7 +67,7 @@ const Dashboard = () => {
     };
 
     fetchData();
-  }, [navigate, fetchName, fetchDashboardData, location.key]);
+  }, [navigate, fetchDashboardData, location.key]);
 
   const openModal = () => setIsModalOpen(true);
 
@@ -120,7 +105,7 @@ const Dashboard = () => {
     <div className="dashboard">
       <Navbar />
       <div className="dashboard-main">
-        <WelcomeBanner name={name} dailyGoal={dailyGoal} applicationsLeft={applicationsLeft} />
+        <WelcomeBanner dailyGoal={dailyGoal} applicationsLeft={applicationsLeft} />
         <JobApplicationActions openModal={openModal} />
         <JobApplicationHistory dashboardData={dashboardData} onEdit={openEditModal} />
       </div>
