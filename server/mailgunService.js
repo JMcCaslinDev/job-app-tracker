@@ -13,13 +13,14 @@ const client = mailgun.client({ username: 'api', key: API_KEY });
 
 function sendLoginEmail(email, link) {
   const data = {
-    from: 'Excited User <mailgun@sandboxa3304eba5eb247c1aeb544cf3cdf3765.mailgun.org>',
+    from: 'TrackFast <noreply@mg.trackfast.io>',
     to: email,
     subject: 'Login to Your Account',
     html: `Click <a href="${link}">here</a> to log in. This link will expire in 15 minutes.`
   };
 
   return new Promise((resolve, reject) => {
+    
     client.messages.create(DOMAIN, data)
       .then(body => {
         resolve(body);

@@ -15,3 +15,4 @@ server/build
 
 # Ignore server archive folder
 server/archive
+client/archive

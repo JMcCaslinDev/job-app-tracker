@@ -4,8 +4,11 @@ const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
 const moment = require('moment-timezone');
 const cors = require('cors');
-const loginRoutes = require('./loginRoute');  // Import at the top
+const loginRoutes = require('./loginRoute');
+const verifyTokenRoutes = require('./verifyTokenRoute');
 const app = express();
+const { Account, Job_Application } = require('./models');
+
 require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 
 // Middleware to parse JSON bodies
@@ -45,42 +48,10 @@ mongoose.connect(process.env.MONGO_URI, {
 }).then(() => console.log('MongoDB connected'))
   .catch(err => console.log(err));
 
-  const { Schema, model } = require('mongoose');
-  
-  const accountSchema = new Schema({
-    email: { type: String, required: true },
-    daily_application_goal: Number,
-    created_at: { type: Date, default: Date.now },
-    loginToken: String,
-    tokenExpiry: Date 
-  });
-  
-  const jobApplicationSchema = new Schema({
-    account_id: { type: String, required: true },
-    job_title: String,
-    company_name: String,
-    employment_type: String,
-    work_location_mode: String,
-    date_applied: Date,
-    application_method: String,
-    pay_amount: Number,
-    pay_amount_max: Number,
-    pay_type: String,
-    experience_level: String,
-    location: String,
-    application_status: String,
-    job_posting_url: String,
-    job_description: String,
-    notes: String,
-    pinned: Boolean
-  });
-  // The (mongodb collection name, schema)
-  const Account = model('Account', accountSchema);
-  const Job_Application = model('Job_Application', jobApplicationSchema);
-//end MongoDB Section
 
 // Use routes
 app.use('/api', loginRoutes);
+app.use('/api', verifyTokenRoutes);
 
 //  Verify tokens are correct
 function verifyJwtToken(req, res, next) {
@@ -98,6 +69,23 @@ function verifyJwtToken(req, res, next) {
     next();
   });
 }
+
+// User signup
+app.post('/api/signup', async (req, res) => {
+  try {
+    const { email } = req.body;
+    const defaultGoal = 10;
+    const newAccount = new Account({
+      email,
+      daily_application_goal: defaultGoal
+    });
+    await newAccount.save();
+    res.json({ success: true });
+  } catch (error) {
+    console.error('Error signing up:', error);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
   
 // Protected dashboard route
 app.get('/api/dashboard', verifyJwtToken, (req, res) => {
