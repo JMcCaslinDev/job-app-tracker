@@ -22,7 +22,7 @@ router.post('/request-login-link', async (req, res) => {
     account.tokenExpiry = expires;
     await account.save();
 
-    const link = `${CLIENT_URL}/login?token=${token}&email=${encodeURIComponent(email)}`;
+    const link = `${CLIENT_URL}login?token=${token}&email=${encodeURIComponent(email)}`;
     await sendLoginEmail(email, link);
     res.send({ message: 'If an account exists with this email, a login link has been sent.' })
   } catch (error) {
