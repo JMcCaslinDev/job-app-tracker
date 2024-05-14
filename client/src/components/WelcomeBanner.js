@@ -6,7 +6,7 @@ const WelcomeBanner = ({ name, dailyGoal, applicationsLeft }) => {
   return (
     <div className="welcome-banner">
       <div className="welcome-text">
-        Welcome back, {name.firstName} {name.lastName}!
+        Welcome back!
       </div>
       <div className="daily-goal">
         <strong>{applicationsLeft}</strong> applications to go!

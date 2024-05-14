@@ -12,3 +12,7 @@ server/build
 
 # Ignore environment files
 .env
+
+# Ignore server archive folder
+server/archive
+client/archive
