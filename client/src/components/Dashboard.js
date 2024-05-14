@@ -28,7 +28,7 @@ const Dashboard = () => {
       const dashboardResponse = await axios.get('/api/user/return-all/job-applications', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setDashboardData(dashboardResponse.data);
+      setDashboardData(dashboardResponse.data.reverse());
 
       const goalResponse = await axios.get('/api/user/daily-goal', {
         headers: { Authorization: `Bearer ${token}` },
