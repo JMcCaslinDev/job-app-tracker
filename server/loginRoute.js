@@ -15,7 +15,7 @@ router.post('/request-login-link', async (req, res) => {
   try {
     const account = await Account.findOne({ email });
     if (!account) {
-      return res.send({ message: 'If an account exists with this email, a login link has been sent.' });
+      return  ;
     }
 
     account.loginToken = token;
@@ -24,7 +24,7 @@ router.post('/request-login-link', async (req, res) => {
 
     const link = `${CLIENT_URL}/login?token=${token}&email=${encodeURIComponent(email)}`;
     await sendLoginEmail(email, link);
-
+    res.send({ message: 'If an account exists with this email, a login link has been sent.' })
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).send('Error sending login link.');
