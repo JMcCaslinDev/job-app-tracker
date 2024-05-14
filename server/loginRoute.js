@@ -4,6 +4,9 @@ const crypto = require('crypto');
 const { sendLoginEmail } = require('./mailgunService');
 const { Account } = require('./models');
 
+// Use environment variable for the client URL
+const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:3000';
+
 router.post('/request-login-link', async (req, res) => {
   const email = req.body.email.toLowerCase();
   const token = crypto.randomBytes(20).toString('hex');
@@ -19,10 +22,9 @@ router.post('/request-login-link', async (req, res) => {
     account.tokenExpiry = expires;
     await account.save();
 
-    const link = `http://localhost:3000/login?token=${token}&email=${encodeURIComponent(email)}`;
+    const link = `${CLIENT_URL}/login?token=${token}&email=${encodeURIComponent(email)}`;
     await sendLoginEmail(email, link);
 
-    res.send({ message: 'Login link has been sent to your email.' });
   } catch (error) {
     console.error('Error sending email:', error);
     res.status(500).send('Error sending login link.');
